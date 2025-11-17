@@ -29,6 +29,7 @@
   /* bg and fg colors */
   --color-background: var(--background);
   --color-bg-dark:var(--bg-dark);
+   --bg-light: var(--bg-light);
 
   --color-foreground: var(--foreground);
   --text-muted: var(--color-muted);
