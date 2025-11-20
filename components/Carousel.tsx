@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
+import Image from "next/image";
 
 interface CarouselProps {
   items: React.ReactNode[];
@@ -52,7 +53,7 @@ export default function GsapCarousel({ items, step = 1, gap = 16, visibleItems =
 
   return (
     <div className="flex items-center gap-4 w-full">
-      <button onClick={handlePrev} className="px-3 py-2 bg-gray-700 text-white rounded-md">←</button>
+      <button onClick={handlePrev} className="mx-1 p-2  hover:bg-(--bg-light) rounded-full"><Image src='/icons/arrow-left_dark.png' alt="arrow-left" width={24} height={24}/></button>
 
       <div ref={wrapperRef} className="overflow-hidden w-full">
         <div
@@ -68,7 +69,7 @@ export default function GsapCarousel({ items, step = 1, gap = 16, visibleItems =
         </div>
       </div>
 
-      <button onClick={handleNext} className="px-3 py-2 bg-gray-700 text-white rounded-md">→</button>
+      <button onClick={handleNext} className="mx-1 p-2  hover:bg-(--bg-light) rounded-full"><Image src='/icons/arrow-right_dark.png' alt="arrow-right" width={24} height={24}/></button>
     </div>
   );
 }

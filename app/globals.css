@@ -40,6 +40,37 @@
 
 }
 
+html {
+  scrollbar-gutter: stable; /* prevents layout shift */
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Transparent scrollbar background (the track) */
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* Visible scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(170, 170, 170, 0.6); /* similar to YouTube */
+  border-radius: 10px;
+  border: 2px solid transparent; /* makes thumb thinner */
+  background-clip: content-box;
+}
+
+/* Hover effect like YouTube */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(170, 170, 170, 0.8);
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
 body {
   /* bg and fg colors */
   background: var(--color-background);
@@ -48,22 +79,4 @@ body {
 }
 
 
-/* text styles */
-.text-basecolor {
-  color: var(--color-foreground);
-}
-
-.text-muted {
-  color: var(--text-muted);
-}
-
-
-/* bg colors */
-.bg-dark {
-  background-color: var(--color-bg-dark);
-}
-
-.bg-light {
-  background-color: var(--bg-light);
-}
 
