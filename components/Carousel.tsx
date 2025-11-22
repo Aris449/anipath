@@ -9,48 +9,33 @@ interface CarouselProps {
   visibleItems?: number;
   step?: number;
   gap?: number;
+  cardFixedWidth?: number;
 }
 
-export default function GsapCarousel({ items, step = 1, gap = 16, visibleItems = 8 }: CarouselProps) {
+export default function GsapCarousel({ items, step = 1, gap = 16, visibleItems = 8, cardFixedWidth = 200 }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [index, setIndex] = useState(0);
-  const [cardWidth, setCardWidth] = useState<number>(0);
-  const defaultCardWidth = 200; // same as skeleton/Card width
-  const computedCardWidth = cardWidth || defaultCardWidth;  
 
+  const visibleCount = visibleItems; // number of cards visible at once
 
-  const visibleCount = visibleItems ; // number of cards visible at once
-
-  useEffect(() => {
-    if (!wrapperRef.current) return;
-    const handleResize = () => {
-      const containerWidth = wrapperRef.current!.offsetWidth;
-      // subtract the total gaps between visible cards so cards fit exactly
-      const totalGaps = Math.max(visibleCount - 1, 0) * gap;
-      const computed = Math.max((containerWidth - totalGaps) / visibleCount, 0);
-      setCardWidth(computed);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [visibleCount, gap]);
+  // fixed card width (do not recalc on resize)
+  const fixedWidth = cardFixedWidth;
 
   const maxIndex = Math.max(items.length - visibleCount, 0);
 
-  const handleNext = () => setIndex(prev => Math.min(prev + step, maxIndex));
-  const handlePrev = () => setIndex(prev => Math.max(prev - step, 0));
+  const handleNext = () => setIndex((prev) => Math.min(prev + step, maxIndex));
+  const handlePrev = () => setIndex((prev) => Math.max(prev - step, 0));
 
   useEffect(() => {
     if (!trackRef.current) return;
 
     gsap.to(trackRef.current, {
-      x: -(index * (computedCardWidth + gap)),
+      x: -(index * (fixedWidth + gap)),
       duration: 0.5,
-      ease: "power2.out"
+      ease: "power2.out",
     });
-  }, [index, computedCardWidth, gap]);
+  }, [index, fixedWidth, gap]);
 
   // clamp index if visible count or items length changes so we don't scroll past end
   useEffect(() => {
@@ -63,14 +48,15 @@ export default function GsapCarousel({ items, step = 1, gap = 16, visibleItems =
     <div className="flex items-center gap-4 w-full">
       <button onClick={handlePrev} className="mx-1 p-2  hover:bg-(--bg-light) rounded-full"><Image src='/icons/arrow-left_dark.png' alt="arrow-left" width={24} height={24}/></button>
 
-      <div ref={wrapperRef} className="overflow-hidden w-full">
+      <div ref={wrapperRef} className="overflow-hidden"
+        style={{ width: `${visibleCount * fixedWidth + Math.max(visibleCount - 1, 0) * gap}px` }}>
         <div
           ref={trackRef}
           className="flex"
           style={{ gap: `${gap}px`,}}
         >
           {items.map((item, i) => (
-           <div key={i} className="shrink-0" style={{ width: computedCardWidth }}>
+           <div key={i} className="shrink-0" style={{ width: fixedWidth }}>
             {item}
           </div>
           ))}

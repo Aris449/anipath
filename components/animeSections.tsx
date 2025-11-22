@@ -22,9 +22,8 @@ export default function TrendingSection() {
   const items = animeList
     ? animeList.map((anime) => {
         const title = anime.title.english || anime.title.romaji;
-        const shortTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
+        const shortTitle = title.length > 20 ? title.slice(0, 30) + "..." : title;
         
-
         return (
           <Card
             key={anime.id}
@@ -53,7 +52,7 @@ export  function UpcomingNextSeasonSection() {
   const items = animeList
     ? animeList.map((anime) => {
         const title = anime.title.english || anime.title.romaji;
-        const shortTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
+        const shortTitle = title.length > 20 ? title.slice(0, 30) + "..." : title;
         
 
         return (
@@ -83,7 +82,7 @@ export  function AllTimePopularSection() {
   const items = animeList
     ? animeList.map((anime) => {
         const title = anime.title.english || anime.title.romaji;
-        const shortTitle = title.length > 20 ? title.slice(0, 20) + "..." : title;
+        const shortTitle = title.length > 20 ? title.slice(0, 30) + "..." : title;
         
         return (
           <Card
