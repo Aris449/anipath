@@ -90,6 +90,16 @@ body {
   .skeleton-track > div:nth-child(-n+2) { display: block; }
 }
 
+/* match useCardCount: show 3 cards at >=400px */
+@media (min-width: 400px) {
+  .skeleton-track > div:nth-child(-n+3) { display: block; }
+}
+
+/* match useCardCount: show 4 cards at >=600px */
+@media (min-width: 600px) {
+  .skeleton-track > div:nth-child(-n+4) { display: block; }
+}
+
 @media (min-width: 745px) {
   .skeleton-track > div:nth-child(-n+3) { display: block; }
 }

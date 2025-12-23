@@ -3,7 +3,7 @@
  const CardSkeleton = () => {
 
   return (
-       <div className=" h-[280px] md:h-[400px] bg-bg-dark rounded-xl flex flex-col items-center >">
+       <div className=" h-[280px] md:h-[400px] w-[120px] md:w-[200px] bg-bg-dark rounded-xl flex flex-col items-center >">
 
       <div  className="w-full h-[180px] md:h-[300px] bg-(--bg-light) rounded-xl " />
  
