@@ -29,8 +29,8 @@ const Card = ({imageSrc = '',  animeTitle = '', animeYear, animeEpisodes, cardHe
         className="w-full rounded-xl object-cover"
         style={{ height: imageHeight, width: '100%', objectFit: 'cover', background: 'var(--bg-light)' }}
       />
-      <div className="w-full flex flex-col px-1 md:px-4  ">
-        <h3 className="text-sm md:text-lg  font-semibold ">{ animeTitle}</h3>
+      <div className="w-full flex flex-col px-1 min-[1001px]:px-4  ">
+        <h3 className="text-sm min-[1001px]:text-lg  font-semibold ">{ animeTitle}</h3>
         <div className="w-full flex flex-col text-(--color-muted) ">
         <span>episodes: {animeEpisodes ? animeEpisodes : '?'}</span>
         <span className="text-sm">{animeYear}</span>

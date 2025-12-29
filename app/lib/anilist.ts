@@ -26,6 +26,29 @@ export interface AnimeDetails {
   season: string | null;
   seasonYear: number | null;
 }
+function getNextSeason() {
+  const month = new Date().getMonth() + 1;
+
+  let season: "WINTER" | "SPRING" | "SUMMER" | "FALL";
+  let year = new Date().getFullYear();
+
+  if (month >= 1 && month <= 3) {
+    season = "SPRING";
+  } else if (month >= 4 && month <= 6) {
+    season = "SUMMER";
+  } else if (month >= 7 && month <= 9) {
+    season = "FALL";
+  } else {
+    season = "WINTER";
+  }
+
+  // If going from FALL → WINTER of next year
+  if (season === "WINTER" && month >= 10) {
+    year += 1;
+  }
+
+  return { season, year };
+}
 
 export async function fetchTrendingAnime(page: number): Promise<Anime[]> {
   const query = `
@@ -57,35 +80,11 @@ export async function fetchTrendingAnime(page: number): Promise<Anime[]> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    next: { revalidate: 60 }  // ⬅ cache for 60s
   });
 
   const json = await response.json();
   return json.data.Page.media as Anime[];
-}
-
-function getNextSeason() {
-  const month = new Date().getMonth() + 1;
-
-  let season: "WINTER" | "SPRING" | "SUMMER" | "FALL";
-  let year = new Date().getFullYear();
-
-  if (month >= 1 && month <= 3) {
-    season = "SPRING";
-  } else if (month >= 4 && month <= 6) {
-    season = "SUMMER";
-  } else if (month >= 7 && month <= 9) {
-    season = "FALL";
-  } else {
-    season = "WINTER";
-  }
-
-  // If going from FALL → WINTER of next year
-  if (season === "WINTER" && month >= 10) {
-    year += 1;
-  }
-
-  return { season, year };
 }
 
 export async function fetchUpcomingAnime(page: number): Promise<Anime[]> {
@@ -123,7 +122,7 @@ export async function fetchUpcomingAnime(page: number): Promise<Anime[]> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    next: { revalidate: 60 }  // ⬅ cache for 60s
   });
 
   const json = await response.json();
@@ -163,7 +162,7 @@ export async function fetchAllTimePopularAnime(page: number): Promise<Anime[]> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    next: { revalidate: 60 }  // ⬅ cache for 60s
   });
 
   const json = await response.json();
@@ -200,7 +199,7 @@ export async function fetchAnimeById(id: number): Promise<AnimeDetails | null> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, variables }),
-    cache: "no-store",
+    next: { revalidate: 60 }  // ⬅ cache for 60s
   });
 
   const json = await response.json();

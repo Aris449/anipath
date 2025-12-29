@@ -8,6 +8,7 @@
 
   --foreground: hsl(0, 0%, 5%);
   --color-muted: hsl(0, 0%, 30%);
+  --color-accent: hsl(112, 52%, 64%);
 
 
 }
@@ -21,6 +22,8 @@
 
     --foreground: hsl(0, 0%, 95%);
     --color-muted: hsl(0, 0%, 70%);
+    --color-accent: hsl(112, 52%, 64%);
+
 
   }
 }
@@ -33,12 +36,16 @@
 
   --color-foreground: var(--foreground);
   --text-muted: var(--color-muted);
+  --color-accent: var(--color-accent);
 
   /* fonts */
   --font-body: var(--font-montserrat);
   --font-heading: var(--font-roboto-slab);
 
 }
+
+
+
 
 html {
   scrollbar-gutter: stable; /* prevents layout shift */
@@ -77,63 +84,18 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-body);
 }
-/* Skeleton responsive visibility for carousel skeleton mode.
-   The track will have class `skeleton-track` in skeleton mode and each direct child
-   is a card wrapper. We hide/show the first N children per breakpoint so the
-   server DOM (always rendering the max number of skeleton items) doesn't change
-   but the browser only displays the right number of skeletons for the viewport.
- */
-.skeleton-track > div { display: none; }
 
-/* smallest: show 2 */
-@media (min-width: 0px) {
-  .skeleton-track > div:nth-child(-n+2) { display: block; }
+
+.loader {
+    width: 150px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side,hsl(112, 52%, 64%) 94%,#0000) top/16px 16px no-repeat,
+    conic-gradient(#0000 30%,hsl(112, 52%, 64%));
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 16px),#000 0);
+  animation: l13 1s infinite linear;
 }
-
-@media (min-width: 400px) {
-  .skeleton-track > div:nth-child(-n+3) { display: block; }
+@keyframes l13{ 
+  100%{transform: rotate(1turn)}
 }
-
-@media (min-width: 600px) {
-  .skeleton-track > div:nth-child(-n+4) { display: block; }
-}
-
-@media (min-width: 800px) {
-  .skeleton-track > div:nth-child(-n+5) { display: block; }
-}
-
-@media (min-width: 915px) {
-  .skeleton-track > div:nth-child(-n+6) { display: block; }
-}
-
-/* match useCardCount: show 4 cards at >=1000px (overrides 915-999 range) */
-@media (min-width: 1025px) {
-  .skeleton-track > div:nth-child(-n+4) { display: block; }
-}
-
-@media (min-width: 1230px) {
-  .skeleton-track > div:nth-child(-n+5) { display: block; }
-}
-
-@media (min-width: 1624px) {
-  .skeleton-track > div:nth-child(-n+6) { display: block; }
-}
-
-@media (min-width: 1860px) {
-  .skeleton-track > div:nth-child(-n+7) { display: block; }
-}
-
-@media (min-width: 2060px) {
-  .skeleton-track > div:nth-child(-n+8) { display: block; }
-}
-@media (min-width: 2280px) {
-  .skeleton-track > div:nth-child(-n+9) { display: block; }
-}
-@media (min-width: 2480px) {
-  .skeleton-track > div:nth-child(-n+10) { display: block; }
-}
-
-
-
-
-

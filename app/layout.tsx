@@ -33,7 +33,7 @@ export default function RootLayout({
         <div className="flex flex-col h-screen">
           
         {/* Mobile layout*/}
-        <div className="lg:hidden">
+        <div className="min-[1400px]:hidden">
         <div className="flex justify-between items-center h-16 gap-4 px-4">
           <Navbar/>
           <Header/>
@@ -47,7 +47,7 @@ export default function RootLayout({
 
 
         {/* Desktop layout */}
-        <div className="hidden lg:flex flex-1">
+        <div className="hidden min-[1400px]:flex flex-1">
           {/* sideBar */}
           <nav className="h-full shrink-0">
             <Navbar/>

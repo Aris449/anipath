@@ -3,6 +3,7 @@ import { fetchAnimeById } from "@/app/lib/anilist"
 
 
 export default async function AnimePage({ params }: { params: any }) {
+
   const resolvedParams = await Promise.resolve(params);
   const anime = await fetchAnimeById(Number(resolvedParams.id));
 
@@ -14,9 +15,9 @@ export default async function AnimePage({ params }: { params: any }) {
 
       <img src={anime.coverImage.large} alt={anime.title.romaji} />
 
-      <div
-        dangerouslySetInnerHTML={{ __html: anime.description }}
-        />
+    <div
+      dangerouslySetInnerHTML={{ __html: anime.description ?? "" }}
+    />
 
       <p>Episodes: {anime.episodes ?? "TBA"}</p>
 
