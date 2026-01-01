@@ -11,6 +11,7 @@ interface CarouselProps {
   gap?: number;
   cardFixedWidth?: number;
   skeleton?: boolean;
+  title?: string;
 }
 
 export default function GsapCarousel({
@@ -20,6 +21,7 @@ export default function GsapCarousel({
   gap = 16,
   cardFixedWidth = 200,
   skeleton = false,
+  title = "",
 }: CarouselProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -88,6 +90,9 @@ export default function GsapCarousel({
 
       {/* Viewport */}
       <div ref={wrapperRef} className="overflow-hidden">
+             <h2 className="text-2xl min-[1001px]:text-4xl mb-1 lg:mb-2  font-bold ">
+                 { title}
+                </h2>
         <div
           ref={trackRef}
           className={`flex${skeleton ? " skeleton-track" : ""}`}
@@ -110,7 +115,7 @@ export default function GsapCarousel({
       </button>
 
       {/* Mobile Controls */}
-      <div className="md:hidden mt-1 flex gap-4">
+      <div className="md:hidden  flex gap-4">
         <button
           onClick={handlePrev}
           className="p-2 hover:opacity-60 bg-(--bg-light) rounded-full"

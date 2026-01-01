@@ -41,7 +41,7 @@ const Navbar = () => {
     <>
       {/* Mobile toggle button */}
       {!isDesktop && (
-        <div className="w-10 flex justify-center items-center h-16">
+        <div className="w-10 flex justify-center items-center h-16 ">
           <button onClick={() => setActive(prev => !prev)} className="shrink-0">
             <Image src="/icons/list_dark.png" alt="list-icon" width={24} height={24} />
           </button>

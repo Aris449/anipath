@@ -8,7 +8,8 @@
 
   --foreground: hsl(0, 0%, 5%);
   --color-muted: hsl(0, 0%, 30%);
-  --color-accent: hsl(112, 52%, 64%);
+  --color-accent: hsl(118, 52%, 58%);
+
 
 
 }
@@ -22,7 +23,7 @@
 
     --foreground: hsl(0, 0%, 95%);
     --color-muted: hsl(0, 0%, 70%);
-    --color-accent: hsl(112, 52%, 64%);
+    --color-accent: hsl(118, 52%, 58%);
 
 
   }
@@ -36,7 +37,7 @@
 
   --color-foreground: var(--foreground);
   --text-muted: var(--color-muted);
-  --color-accent: var(--color-accent);
+  --text-accent: var(--color-accent);
 
   /* fonts */
   --font-body: var(--font-montserrat);
@@ -85,7 +86,7 @@ body {
   font-family: var(--font-body);
 }
 
-
+/* loader */
 .loader {
     width: 150px;
   aspect-ratio: 1;

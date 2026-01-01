@@ -1,31 +1,25 @@
-// CarouselSection.tsx
 "use client";
 
 import Card from "@/components/Card";
 import Carousel from "@/components/Carousel";
 import { Anime } from "../app/lib/anilist";
 import { useState, useLayoutEffect } from "react";
+import { useCardCount } from "@/components/useCardCount";
 
 interface CarouselSectionProps {
   animeList: Anime[];
+  title?: string;
 }
 
-export default function CarouselSection({ animeList }: CarouselSectionProps) {
+export default function CarouselSection({ animeList, title }: CarouselSectionProps) {
   const [windowWidth, setWindowWidth] = useState<number | null>(null);
-  const [cardCount, setCardCount] = useState<number | null>(null);
+  const cardCount = useCardCount();
 
   // Measure BEFORE paint
   useLayoutEffect(() => {
     const update = () => {
       const width = window.innerWidth;
       setWindowWidth(width);
-
-      // your logic for card count:
-      const cards = width <= 1001
-        ? Math.max(1, Math.floor(width / 140)) // example mobile formula
-        : Math.max(1, Math.floor(width / 240)); // desktop
-
-      setCardCount(cards);
     };
 
     update();
@@ -33,9 +27,8 @@ export default function CarouselSection({ animeList }: CarouselSectionProps) {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // ⛔ Avoid rendering until ready
   if (windowWidth === null || cardCount === null) {
-    return <div style={{ height: 420 }} />; // skeleton space (optional)
+    return <div style={{ height: 420 }} />; 
   }
 
   const isMobile = windowWidth <= 1001;
@@ -51,9 +44,8 @@ export default function CarouselSection({ animeList }: CarouselSectionProps) {
         animeId={anime.id}
         imageSrc={anime.coverImage.large}
         animeTitle={isMobile ? shorter : short}
-        animeYear={anime.seasonYear}
         animeEpisodes={anime.episodes}
-        cardHeight={isMobile ? 280 : 400}
+        cardHeight={isMobile ? 240 : 380}
         imageHeight={isMobile ? 180 : 300}
       />
     );
@@ -62,10 +54,11 @@ export default function CarouselSection({ animeList }: CarouselSectionProps) {
   return (
     <Carousel
       cardFixedWidth={isMobile ? 120 : 200}
+      gap={isMobile ? 12 : 16}
       items={items}
       step={cardCount}
-      gap={isMobile ? 12 : 16}
       visibleItems={cardCount}
+      title={title}
     />
   );
 }

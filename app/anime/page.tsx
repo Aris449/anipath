@@ -4,6 +4,7 @@ import {
   fetchUpcomingAnime,
   fetchAllTimePopularAnime,
 } from "../lib/anilist";
+import { Suspense } from "react";
 
 export default async function Home() {
 
@@ -18,26 +19,15 @@ export default async function Home() {
     <main className="flex flex-col justify-center items-center py-6 min-[1001px]:py-10 gap-4 min-[1001px]:gap-10">
 
       <div className="max-w-full mx-auto">
-        <h2 className="text-2xl min-[1001px]:text-4xl mb-4 lg:mb-8 px-2 md:px-12 font-bold">
-          TRENDING NOW
-        </h2>
-        <CarouselSection animeList={trending} />
+        <CarouselSection animeList={trending} title={"TRENDING"}/>
       </div>
 
       <div className="max-w-full mx-auto">
-        <h2 className="text-2xl min-[1001px]:text-4xl mb-4 lg:mb-8 px-2 md:px-12 font-bold">
-          UPCOMING NEXT SEASON
-        </h2>
-
-        <CarouselSection animeList={upcoming} />
+        <CarouselSection animeList={upcoming} title={"UPCOMING"}/>
       </div>
 
       <div className="max-w-full mx-auto">
-        <h2 className="text-2xl min-[1001px]:text-4xl mb-4 lg:mb-8 px-2 md:px-12 font-bold">
-          ALL TIME POPULAR
-        </h2>
-
-        <CarouselSection animeList={popular} />
+        <CarouselSection animeList={popular} title={"ALL TIME POPULAR"}/>
       </div>
 
     </main>
