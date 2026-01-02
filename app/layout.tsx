@@ -3,7 +3,6 @@ import { Roboto_Slab, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
-import { NavbarProvider } from "@/components/NavbarContextProvider";
 
 const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
@@ -33,20 +32,20 @@ export default function RootLayout({
           
         <div className="flex flex-col h-screen">
           
-          <NavbarProvider>
 
-            <div className="h-screen flex flex-col flex-1">
-              {/* Header */}
-              <Header />
-
-              {/* Main area */}
-              <div className="flex flex-1 overflow-hidden">
-                
-                {/* Sidebar nav */}
+            <div className="h-screen flex  flex-1">
+                   {/* Sidebar nav */}
                 <nav className="  ">
                   <Navbar />
                 </nav>
 
+          
+              {/* Main area */}
+              <div className="flex flex-col overflow-hidden">
+                  {/* Header */}
+              <Header />
+
+           
                 {/* Page content */}
                 <main className="flex-1 overflow-y-auto">
                   {children}
@@ -54,7 +53,6 @@ export default function RootLayout({
 
               </div>
             </div>
-          </NavbarProvider>
 
 
         </div>
