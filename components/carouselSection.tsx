@@ -31,7 +31,7 @@ export default function CarouselSection({ animeList, title }: CarouselSectionPro
     return <div style={{ height: 420 }} />; 
   }
 
-  const isMobile = windowWidth <= 1001;
+  const isMobile = windowWidth <= 1000;
 
   const items = animeList.map((anime) => {
     const title = anime.title.english || anime.title.romaji;

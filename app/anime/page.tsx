@@ -16,7 +16,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="flex flex-col justify-center items-center py-6 min-[1001px]:py-10 gap-4 min-[1001px]:gap-10">
+    <main className="flex flex-col justify-center items-center py-2 md:py-6 gap-2 min-[1001px]:gap-6">
 
       <div className="max-w-full mx-auto">
         <CarouselSection animeList={trending} title={"TRENDING"}/>

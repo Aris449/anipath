@@ -12,8 +12,6 @@ interface CardProps {
 
 
 const Card = ({imageSrc = '',  animeTitle = '',  cardHeight = 380, imageHeight = 300, animeId,  }: CardProps) => {
-  // common card class
-  // h-[400px] w-full bg-bg-dark rounded-xl flex flex-col items-center 
 
   return (
     <div className="w-full bg-bg-dark rounded-xl"
@@ -30,7 +28,6 @@ const Card = ({imageSrc = '',  animeTitle = '',  cardHeight = 380, imageHeight =
       />
       <div className="w-full flex flex-col px-1 min-[1001px]:px-4 my-2">
         <h3 className="text-sm min-[1001px]:text-lg font-semibold ">{ animeTitle}</h3>
-     
       </div>
     </Link>
     </div>

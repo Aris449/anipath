@@ -86,6 +86,11 @@ body {
   font-family: var(--font-body);
 }
 
+
+.mask-image-to-bottom {
+  mask-image: linear-gradient(to bottom, var(--color-background) 70%, transparent 100%);
+}
+
 /* loader */
 .loader {
     width: 150px;

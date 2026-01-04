@@ -16,16 +16,54 @@ export interface AnimeDetails {
   id: number;
   title: {
     romaji: string;
-    english: string | null;
+    english?: string;
+    native?: string;
   };
   coverImage: {
+    extraLarge: string;
     large: string;
+    color?: string;
   };
-  description: string | null;
-  episodes: number | null;
-  season: string | null;
-  seasonYear: number | null;
+  bannerImage?: string;
+  description?: string;
+  averageScore?: number;
+  popularity?: number;
+  episodes?: number;
+  season?: string;
+  seasonYear?: number;
+  format?: string;
+  duration?: number;
+  status?: string;
+   startDate: {
+      year?:number;
+      month?:number;
+      day?:number;
+   };
+  endDate: {
+      year?:number;
+      month?:number;
+      day?:number;
+  }
+
+    studios?: {
+    nodes: Array<{
+      id: number;
+      name: string;
+    }>;
+  };
+
+        
+   producers?: {
+    nodes: Array<{
+      id: number;
+      name: string;
+    }>;
+  };
+    
 }
+
+
+
 function getNextSeason() {
   const month = new Date().getMonth() + 1;
 
@@ -174,24 +212,164 @@ export async function fetchAllTimePopularAnime(page: number): Promise<Anime[]> {
 }
 
 export async function fetchAnimeById(id: number): Promise<AnimeDetails | null> {
-  const query = `
-    query ($id: Int) {
-      Media(id: $id, type: ANIME) {
-        id
-        title {
-          romaji
-          english
-        }
-        coverImage {
-          large
-        }
-        description(asHtml: false)
-        episodes
+const query = `
+  query ($id: Int) {
+    Media(id: $id, type: ANIME) {
+      id
+      idMal
+
+      title {
+        romaji
+        english
+        native
+      }
+
+       format
+    status
+    episodes
+    duration
+    season
+    seasonYear
+    source
+    hashtag
+
+      description(asHtml: false)
+
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+
+      bannerImage
+
+      averageScore
+      meanScore
+      popularity
+      favourites
+      trending
+
+      rankings {
+        rank
+        type
         season
-        seasonYear
+        year
+        format
+      }
+
+      nextAiringEpisode {
+        episode
+        timeUntilAiring
+      }
+
+      startDate {
+        year
+        month
+        day
+      }
+
+      endDate {
+        year
+        month
+        day
+      }
+
+      studios(isMain: true) {
+        nodes {
+          id
+          name
+        }
+      }
+
+      
+    producers: studios(isMain: false) {
+      nodes {
+        id
+        name
       }
     }
-  `;
+
+      
+
+      genres
+      tags {
+        name
+        rank
+        isGeneralSpoiler
+      }
+
+      trailer {
+        id
+        site
+        thumbnail
+      }
+
+      relations {
+        edges {
+          relationType
+          node {
+            id
+            type
+            title {
+              romaji
+            }
+            format
+            coverImage {
+              medium
+            }
+          }
+        }
+      }
+
+      characters(perPage: 10) {
+        edges {
+          role
+          node {
+            id
+            name {
+              full
+            }
+            image {
+              medium
+            }
+          }
+        }
+      }
+
+      staff(perPage: 10) {
+        edges {
+          role
+          node {
+            id
+            name {
+              full
+            }
+            image {
+              medium
+            }
+          }
+        }
+      }
+
+      streamingEpisodes {
+        title
+        url
+        site
+        thumbnail
+      }
+
+      externalLinks {
+        site
+        url
+        icon
+      }
+
+      siteUrl
+    }
+  }
+`;
+
 
   const variables = { id };
 

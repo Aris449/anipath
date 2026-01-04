@@ -3,6 +3,7 @@ import { Roboto_Slab, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
+import { NavbarProvider } from "@/components/NavbarContextProvider";
 
 const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
@@ -31,28 +32,52 @@ export default function RootLayout({
       >
           
         <div className="flex flex-col h-screen">
-          
+          <NavbarProvider>
 
-            <div className="h-screen flex  flex-1">
-                   {/* Sidebar nav */}
+            {/*Desktop layout */}
+        <div className="hidden h-screen min-[1400px]:flex flex-1">
+                  {/* Sidebar nav */}
+                <nav className="  ">
+                  <Navbar />
+                </nav>
+         
+
+              {/* Main area */}
+              <div className="flex flex-col flex-1 overflow-hidden">
+                {/* Page content */}
+                <main className="flex-1 overflow-y-auto">
+
+                {/* Header */}
+              <Header />
+                  {children}
+                </main>
+
+              </div>
+             </div>
+
+          
+                {/*Mobile layout */} 
+            <div className=" h-screen flex flex-col flex-1 min-[1400px]:hidden">
+    
+
+              {/* Main area */}
+              <div className="flex  overflow-hidden">
+                {/* Sidebar nav */}
                 <nav className="  ">
                   <Navbar />
                 </nav>
 
-          
-              {/* Main area */}
-              <div className="flex flex-col overflow-hidden">
-                  {/* Header */}
-              <Header />
-
-           
                 {/* Page content */}
                 <main className="flex-1 overflow-y-auto">
+                          {/* Header */}
+              <Header />
+
                   {children}
                 </main>
 
               </div>
             </div>
+          </NavbarProvider>
 
 
         </div>
