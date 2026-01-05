@@ -34,6 +34,10 @@ export interface AnimeDetails {
   format?: string;
   duration?: number;
   status?: string;
+  source?: string;
+  hashtag?: string;
+  genres?: string[];
+  synonyms?: string[];
    startDate: {
       year?:number;
       month?:number;
@@ -224,7 +228,9 @@ const query = `
         native
       }
 
-       format
+    synonyms
+
+    format
     status
     episodes
     duration
@@ -233,7 +239,7 @@ const query = `
     source
     hashtag
 
-      description(asHtml: false)
+    description(asHtml: false)
 
       coverImage {
         extraLarge
@@ -290,8 +296,6 @@ const query = `
       }
     }
 
-      
-
       genres
       tags {
         name
@@ -310,13 +314,14 @@ const query = `
           relationType
           node {
             id
+            status
             type
             title {
               romaji
             }
             format
             coverImage {
-              medium
+              large
             }
           }
         }

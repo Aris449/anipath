@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
 import { NavbarProvider } from "@/components/NavbarContextProvider";
+import ScrollToTop from "@/components/ScrollToTop";
+
 
 const robotoSlab = Roboto_Slab({
   variable: "--font-roboto-slab",
@@ -30,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${robotoSlab.variable} ${montserrat.variable} antialiased`}
       >
-          
+
         <div className="flex flex-col h-screen">
           <NavbarProvider>
 
@@ -49,6 +51,7 @@ export default function RootLayout({
 
                 {/* Header */}
               <Header />
+                   <ScrollToTop />
                   {children}
                 </main>
 
@@ -71,7 +74,7 @@ export default function RootLayout({
                 <main className="flex-1 overflow-y-auto">
                           {/* Header */}
               <Header />
-
+                     <ScrollToTop />
                   {children}
                 </main>
 
@@ -81,6 +84,7 @@ export default function RootLayout({
 
 
         </div>
+          
       </body>
     </html>
   );

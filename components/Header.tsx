@@ -6,7 +6,8 @@ const Header = () => {
 
   const {active, setActive} = useNavbar();
   return (
-    <header className="flex justify-between min-[1400px]:justify-center items-center gap-2 w-full h-16">
+    <header className="flex justify-between min-[1400px]:justify-center items-center gap-2 w-full h-16 mask-image-to-bottom">
+      
 
             <button  onClick={() => setActive((prev: boolean) => !prev)} className="shrink-0 h-16 flex items-center  px-6 min-[1400px]:hidden  ">
                   <Image src="/icons/list_dark.png" alt="close-icon" width={26} height={26} />
@@ -16,6 +17,7 @@ const Header = () => {
             <input type="text" placeholder="Search" className="w-full h-full flex items-center ml-4 outline-none placeholder:text-(--color-foreground)"  />
             <Image src='/icons/search_dark.png' alt='search-icon' width={20} height={20} className='mr-4'/>
         </div>
+        
 
     </header>
   )

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react';
 import { useNavbar } from './NavbarContextProvider';
+import useIsDesktop from './useWindowSize';
 
 const link_items = [
   { id: 1, href: '/', icon: '/icons/home_dark.png', label: 'Home' },
@@ -11,18 +12,15 @@ const link_items = [
 
 const Navbar = () => {
   const { active, setActive } = useNavbar();
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1400);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     if (isDesktop) setActive(false);
   }, [isDesktop, setActive]);
+
+  if (isDesktop === null) {
+    return null; 
+  }
 
   return (
     <>
