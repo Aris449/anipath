@@ -4,9 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 
 
-
-const AnimePageInfo = ( {currentAnime}: {  currentAnime: any }) => {
+const AnimePageInfo = ( {currentAnime}: { currentAnime: any }) => {
   const [activeContent, setActiveContent] = useState("Overview");
+
+  
 
   const buttons = [{
     title: "Overview",
@@ -16,18 +17,35 @@ const AnimePageInfo = ( {currentAnime}: {  currentAnime: any }) => {
     title: "Characters",
   }, {
     title: "Staff",
-  }, {
-    title: "Stats",
-  }];
+  }, 
+    ];
 
    const renderContent = () => {
     switch (activeContent) {
       case "Overview":
         return  <div>
 
+
+      <div className="w-220 mt-10">
+      {currentAnime.trailer?.site === "youtube" && (
+        <>
+      <h2 className="text-3xl my-4 font-bold">Trailer</h2>
+        <div className="w-full aspect-video rounded-2xl overflow-hidden mb-4">
+          <iframe
+            src={`https://www.youtube.com/embed/${currentAnime.trailer.id}`}
+            className="w-full h-full"
+            allowFullScreen
+          />
+        </div>
+        </>
+      )}
+    </div>
+
     <div className="mt-10">
+      {currentAnime.relations?.edges?.length > 0 && (
       <h2 className="text-3xl font-bold">Relations</h2>
-        <div className="flex gap-4 my-8 flex-wrap items-center">
+      )}
+        <div className="flex gap-4 my-8 flex-wrap ">
       {currentAnime.relations?.edges?.map((edge: any) => (
         <Link
           key={edge.node.id}
@@ -36,15 +54,18 @@ const AnimePageInfo = ( {currentAnime}: {  currentAnime: any }) => {
         >
         
           {edge.node.coverImage?.large && (
-            <img
-              className="w-30 h-40 rounded-xl shrink-0"
-              src={edge.node.coverImage.large}
-              alt={edge.node.title?.romaji ?? "Relation cover"}
-            />
+            <div className="w-30">
+              <img
+                className="w-full h-full rounded-xl shrink-0"
+                src={edge.node.coverImage.large}
+                alt={edge.node.title?.romaji ?? "Relation cover"}
+              />
+
+            </div>
           )}
           <div className="w-50 h-40 flex flex-col gap-2">
             <span className="mt-2 text-sm">{edge.relationType}</span>
-            <span className="text-md font-bold">{edge.node.title?.romaji}</span>
+            <span className="text-md font-bold">{edge.node.title?.romaji.length > 50 ? `${edge.node.title?.romaji.substring(0, 50)}...` : edge.node.title?.romaji}</span>
             <div className="mt-auto mb-2 flex gap-2" >
             <span className="text-sm">{edge.node.type}</span>
             <span className="text-sm">{edge.node.status}</span>
@@ -55,19 +76,7 @@ const AnimePageInfo = ( {currentAnime}: {  currentAnime: any }) => {
         </div>
     </div>
 
-    <div className="w-220">
-      <h2 className="text-3xl my-4 font-bold">Trailer</h2>
-      {currentAnime.trailer?.site === "youtube" && (
-        <div className="w-full aspect-video rounded-2xl overflow-hidden mb-4">
 
-          <iframe
-            src={`https://www.youtube.com/embed/${currentAnime.trailer.id}`}
-            className="w-full h-full"
-            allowFullScreen
-          />
-        </div>
-      )}
-    </div>
 
   </div>
 

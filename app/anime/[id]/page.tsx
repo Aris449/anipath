@@ -1,12 +1,120 @@
 
 import { fetchAnimeById } from "@/app/lib/anilist"
 import AnimePageInfo from "@/components/AnimePageInfo";
+import Link from "next/link";
 
 
 export default async function AnimePage({ params }: { params: any }) {
 
   const resolvedParams = await Promise.resolve(params);
   const anime = await fetchAnimeById(Number(resolvedParams.id));
+
+   const PLATFORM_META: Record<string, {
+  label: string;
+  brandColor: string;
+  icon?: string;
+}> = {
+  Crunchyroll: {
+    label: "Crunchyroll",
+    brandColor: "#F47521",
+    icon: "/icons/crunchyroll.svg",
+  },
+  Netflix: {
+    label: "Netflix",
+    brandColor: "#E50914",
+    icon: "/icons/netflix.svg",
+  },
+  YouTube: {
+    label: "YouTube",
+    brandColor: "#FF0000",
+    icon: "/icons/youtube.svg",
+  },
+  HIDIVE: {
+    label: "HIDIVE",
+    brandColor: "#00AEEF",
+    icon: "/icons/hidive.svg",
+  },
+  "Bilibili TV": {
+    label: "Bilibili",
+    brandColor: "#00A1D6",
+    icon: "/icons/bilibili.svg",
+  },
+  "Disney Plus": {
+    label: "Disney+",
+    brandColor: "#113CCF",
+    icon: "/icons/disneyplus.svg",
+  },
+  Funimation: {
+    label: "Funimation",
+    brandColor: "#5B2D90",
+    icon: "/icons/funimation.svg",
+  },
+  Wakanim: {
+    label: "Wakanim",
+    brandColor: "#FF0050",
+    icon: "/icons/wakanim.svg",
+  },
+  "Amazon Prime Video": {
+    label: "Prime Video",
+    brandColor: "#00A8E1",
+    icon: "/icons/primevideo.svg",
+  },
+  "Muse Asia": {
+    label: "Muse Asia",
+    brandColor: "#F6A623",
+    icon: "/icons/museasia.svg",
+  },
+  "Ani-One Asia": {
+    label: "Ani-One Asia",
+    brandColor: "#F5A623",
+    icon: "/icons/anione.svg",
+  },
+  "Tencent Video": {
+    label: "Tencent Video",
+    brandColor: "#2FB1F2",
+    icon: "/icons/tencent.svg",
+  },
+  IQIYI: {
+    label: "iQIYI",
+    brandColor: "#00C300",
+    icon: "/icons/iqiyi.svg",
+  },
+  "ABEMA Video": {
+    label: "Abema",
+    brandColor: "#000000",
+    icon: "/icons/abema.svg",
+  },
+  "d Anime Store": {
+    label: "d Anime Store",
+    brandColor: "#FF6600",
+    icon: "/icons/danime.svg",
+  },
+  Hulu: {
+    label: "Hulu",
+    brandColor: "#1CE783",
+    icon: "/icons/hulu.svg",
+  },
+  VRV: {
+    label: "VRV",
+    brandColor: "#F5C518",
+    icon: "/icons/vrv.svg",
+  },
+  "U-NEXT": {
+    label: "U-NEXT",
+    brandColor: "#0061AE",
+    icon: "/icons/unext.svg",
+  },
+  "Official Site": {
+    label: "Official Site",
+    brandColor: "#4B5563",
+    icon: "/icons/link.svg",
+  },
+};
+
+
+const streamingLinks = (anime.externalLinks ?? [])
+  .filter(l => PLATFORM_META[l.site]);
+
 
 
   if (!anime) return <div>Anime not found</div>;
@@ -52,31 +160,13 @@ function getMonthName(month?: number) {
               </div>
 
           {/* side info */}
-          <div className="flex flex-col justify-center w-[230px]">
+          <div className="flex flex-col justify-center my-4 w-[230px]">
 
-            <div className=" mt-4 px-2 rounded-2xl">
+            <div className="  px-2 rounded-2xl">
                 {anime.format && (
                   <div className="flex flex-col ">
                     <span className="text-xl font-bold">Format</span>
                     <span className="text-(--color-muted) font-semibold">{anime.format}</span>
-                  </div>
-                )}
-            </div>
-
-            <div className="">
-                {anime.episodes && (
-                  <div className="flex flex-col mt-4 px-2">
-                    <span className="text-xl font-bold">Episodes</span>
-                    <span className="text-(--color-muted) font-semibold">{anime.episodes}</span>
-                  </div>
-                )}
-            </div>
-
-            <div className="">
-                {anime.duration && (
-                  <div className="flex flex-col mt-4 px-2">
-                    <span className="text-xl font-bold">Episode Duration</span>
-                    <span className="text-(--color-muted) font-semibold">{anime.duration} mins</span>
                   </div>
                 )}
             </div>
@@ -177,19 +267,7 @@ function getMonthName(month?: number) {
                 )}
             </div>
 
-              <div className="">
-                {anime.genres && anime.genres.length > 0 && (
-                <div className="flex flex-col mt-4 px-2">
-                  <span className="text-xl font-bold">Genres</span>
-
-                  <div className="text-(--color-muted) font-semibold flex flex-col">
-                    {anime.genres.map((genre) => (
-                      <span key={genre}>{genre}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+          
 
             <div className="">
                 {anime.title.romaji && (
@@ -238,11 +316,62 @@ function getMonthName(month?: number) {
               
           </div>
 
-           <div className={` ${anime.bannerImage ? 'mt-4' :""} mx-16 flex flex-col gap-4`} >
+           <div className={`  mx-16 flex flex-col gap-4`} >
 
-            <div className='flex flex-col justify-center gap-2 min-h-60'>
+            <div className='flex flex-col min-h-82 justify-center gap-2 '>
                   <h1 className="text-3xl font-bold">{anime.title.english}</h1>
                   <div className="text-(--color-muted)" dangerouslySetInnerHTML={{ __html: anime.description ?? "" }} />
+                  <div className="flex flex-col gap-2">
+                  {anime.genres && anime.genres.length > 0 && (
+                  <div className="flex mt-4 items-center gap-4">
+                    <span className="text-xl font-bold">Genres:</span>
+                    <div className="text-(--color-muted) font-semibold flex items-center gap-2">
+                      {anime.genres.map((genre) => (
+                        <Link href="#" className="text-md " key={genre}>{genre}</Link>
+                      ))}
+                    </div>
+                  </div>
+                    )}
+                    <div className="flex items-center gap-4">
+                    <span className="text-xl font-bold">Episodes:</span>
+                  <div className="text-(--color-muted) text-md  font-semibold flex items-center gap-2">
+                    {anime.episodes ? anime.episodes : "N/A"}
+                  </div>
+
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                    <span className="text-xl font-bold">Episode duration:</span>
+                  <div className="text-(--color-muted) text-md  font-semibold flex items-center gap-2">
+                    {anime.duration ? `${anime.duration} mins` : "N/A"}
+                  </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                  <div className="text-(--color-muted) text-md  font-semibold flex items-center gap-2">
+                     {streamingLinks.map(link => {
+                    const meta = PLATFORM_META[link.site];
+
+                    return (
+                      <Link
+                        key={link.url}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-1 rounded-xl text-white"
+                        style={{ background: meta.brandColor }}
+                      >
+                        {meta.icon && (
+                          <img src={meta.icon} className="w-5 h-5" />
+                        )}
+                        <span>{meta.label}</span>
+                      </Link>
+                    );
+                  })}
+                  </div>
+                    </div>
+              
+            </div>
             </div>
 
                   <AnimePageInfo currentAnime={anime} />

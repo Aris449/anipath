@@ -66,6 +66,46 @@ export interface AnimeDetails {
     
 }
 
+const ANILIST_URL = "https://graphql.anilist.co";
+
+export async function searchAnime(query: string) {
+  const gql = `
+    query ($search: String) {
+      Page(perPage: 20) {
+        media(
+          search: $search
+          type: ANIME
+          sort: [POPULARITY_DESC]
+        ) {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+          }
+          format
+          seasonYear
+        }
+      }
+    }
+  `;
+
+  const res = await fetch("https://graphql.anilist.co", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: gql,
+      variables: { search: query },
+    }),
+    next: { revalidate: 60 },
+  });
+
+  const json = await res.json();
+  return json.data.Page.media;
+}
+
 
 
 function getNextSeason() {
@@ -327,7 +367,7 @@ const query = `
         }
       }
 
-      characters(perPage: 10) {
+      characters(perPage: 20) {
         edges {
           role
           node {
@@ -342,7 +382,7 @@ const query = `
         }
       }
 
-      staff(perPage: 10) {
+      staff(perPage: 20) {
         edges {
           role
           node {
