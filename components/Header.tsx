@@ -3,6 +3,13 @@
 import Image from "next/image";
 import { useNavbar } from "./NavbarContextProvider";
 import SearchBar from "./SearchBar";
+import {
+  SignInButton,
+  SignOutButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 
 const Header = () => {
   const { setActive } = useNavbar();
@@ -26,6 +33,26 @@ const Header = () => {
       {/* Search */}
       <div className="w-60 md:w-xl mx-2">
         <SearchBar />
+      </div>
+
+      {/* Sign In/Out Buttons */}
+      <div className="flex gap-3 items-center">
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="px-4 py-2 bg-bg-light rounded-md">
+              Sign In
+            </button>
+          </SignInButton>
+        </SignedOut>
+
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+          <SignOutButton>
+            <button className="px-4 py-2 bg-red-500 rounded-md">
+              Sign Out
+            </button>
+          </SignOutButton>
+        </SignedIn>
       </div>
 
     </header>

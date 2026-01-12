@@ -11,7 +11,6 @@ export interface Anime {
   season: string | null;
   seasonYear: number | null;
 }
-
 export interface AnimeDetails {
   id: number;
   title: {
@@ -38,32 +37,39 @@ export interface AnimeDetails {
   hashtag?: string;
   genres?: string[];
   synonyms?: string[];
-   startDate: {
-      year?:number;
-      month?:number;
-      day?:number;
-   };
+
+  startDate: {
+    year?: number;
+    month?: number;
+    day?: number;
+  };
+
   endDate: {
-      year?:number;
-      month?:number;
-      day?:number;
-  }
+    year?: number;
+    month?: number;
+    day?: number;
+  };
 
-    studios?: {
+  studios?: {
     nodes: Array<{
       id: number;
       name: string;
     }>;
   };
 
-        
-   producers?: {
+  producers?: {
     nodes: Array<{
       id: number;
       name: string;
     }>;
   };
-    
+
+  /** ✅ FIXED */
+  externalLinks?: Array<{
+    site: string;
+    url: string;
+    icon?: string;
+  }>;
 }
 
 const ANILIST_URL = "https://graphql.anilist.co";

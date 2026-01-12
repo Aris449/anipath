@@ -1,5 +1,5 @@
 
-import { fetchAnimeById } from "@/app/lib/anilist"
+import { fetchAnimeById } from "@/lib/anilist"
 import AnimePageInfo from "@/components/AnimePageInfo";
 import Link from "next/link";
 
@@ -7,7 +7,14 @@ import Link from "next/link";
 export default async function AnimePage({ params }: { params: any }) {
 
   const resolvedParams = await Promise.resolve(params);
-  const anime = await fetchAnimeById(Number(resolvedParams.id));
+ const anime = await fetchAnimeById(Number(resolvedParams.id));
+
+if (!anime) {
+  return <div>Anime not found</div>;
+}
+
+
+  
 
    const PLATFORM_META: Record<string, {
   label: string;
@@ -110,7 +117,6 @@ export default async function AnimePage({ params }: { params: any }) {
     icon: "/icons/link.svg",
   },
 };
-
 
 const streamingLinks = (anime.externalLinks ?? [])
   .filter(l => PLATFORM_META[l.site]);

@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { searchAnime } from "@/app/lib/anilist";
+import { searchAnime } from "@/lib/anilist";
+import Card from "./Card";
 
 export default async function SearchResults({search,}: {search?: string;}) {
   if (!search) {
@@ -17,27 +17,16 @@ export default async function SearchResults({search,}: {search?: string;}) {
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mt-6">
-      {results.map((anime: any) => (
-        <Link
-          key={anime.id}
-          href={`/anime/${anime.id}`}
-          className="group"
-        >
-          <img
-            src={anime.coverImage.large}
-            className="rounded-xl group-hover:scale-105 transition"
-          />
-
-          <p className="mt-2 font-semibold">
-            {anime.title.english ?? anime.title.romaji}
-          </p>
-
-          <p className="text-sm text-muted">
-            {anime.format} · {anime.seasonYear}
-          </p>
-        </Link>
-      ))}
+   <div className="flex flex-wrap justify-center gap-6 mt-12">
+  {results.map((anime: any) => (
+    <div key={anime.id} className="w-[120px] min-[1000px]:w-[200px] h-60 min-[1000px]:h-[380px]">
+      <Card
+        imageSrc={anime.coverImage.large}
+        animeTitle={anime.title.english ?? anime.title.romaji}
+        animeId={anime.id}
+      />
     </div>
+  ))}
+</div>
   );
 }

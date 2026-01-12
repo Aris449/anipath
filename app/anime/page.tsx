@@ -3,7 +3,7 @@ import {
   fetchTrendingAnime,
   fetchUpcomingAnime,
   fetchAllTimePopularAnime,
-} from "../lib/anilist";
+} from "../../lib/anilist";
 import { Suspense } from "react";
 
 export default async function Home() {

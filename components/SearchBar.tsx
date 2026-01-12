@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   setSearchOrigin,
   consumeSearchOrigin,
-} from "../app/lib/searchHistory";
+} from "../lib/searchHistory";
 
 export default function SearchBar() {
   const router = useRouter();

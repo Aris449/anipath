@@ -2,7 +2,7 @@
 
 import Card from "@/components/Card";
 import Carousel from "@/components/Carousel";
-import { Anime } from "../app/lib/anilist";
+import { Anime } from "../lib/anilist";
 import { useState, useLayoutEffect } from "react";
 import { useCardCount } from "@/components/useCardCount";
 
@@ -12,8 +12,8 @@ interface CarouselSectionProps {
 }
 
 export default function CarouselSection({ animeList, title }: CarouselSectionProps) {
-  const [windowWidth, setWindowWidth] = useState<number | null>(null);
   const cardCount = useCardCount();
+  const [windowWidth, setWindowWidth] = useState<number | null>(null);
 
   // Measure BEFORE paint
   useLayoutEffect(() => {
@@ -45,8 +45,6 @@ export default function CarouselSection({ animeList, title }: CarouselSectionPro
         imageSrc={anime.coverImage.large}
         animeTitle={isMobile ? shorter : short}
         animeEpisodes={anime.episodes}
-        cardHeight={isMobile ? 240 : 380}
-        imageHeight={isMobile ? 180 : 300}
       />
     );
   });
