@@ -12,6 +12,7 @@ interface CardProps {
 }
 
 
+
 const Card = ({imageSrc = '',  animeTitle = '',   animeId,  }: CardProps) => {
   
   return (
@@ -29,6 +30,7 @@ const Card = ({imageSrc = '',  animeTitle = '',   animeId,  }: CardProps) => {
     </Link>
       <div className="w-full flex flex-col px-1 min-[1001px]:px-4 my-2">
         <h3 className="text-sm min-[1001px]:text-lg font-semibold ">{ animeTitle}</h3>
+        {animeId && <LikeBtn animeId={animeId} />}
       </div>
     </div>
   )

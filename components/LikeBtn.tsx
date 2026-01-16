@@ -1,35 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useTransition } from "react";
 
-export default function LikeBtn({ animeId, title, image }: any) {
+interface LikeButtonProps {
+  animeId: number;
+}
+
+export default function LikeBtn({ animeId }: LikeButtonProps) {
   const [liked, setLiked] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {
-    fetch(`/api/like?animeId=${animeId}`)
-      .then(res => res.json())
-      .then(data => setLiked(data.liked));
-  }, [animeId]);
-
-  const toggleLike = async () => {
-    if (liked) {
-      await fetch("/api/like", {
-        method: "DELETE",
+  const handleLike = () => {
+    startTransition(async () => {
+      await fetch("/api/anime/like", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ animeId }),
       });
-      setLiked(false);
-    } else {
-      await fetch("/api/like", {
-        method: "POST",
-        body: JSON.stringify({ animeId, title, image }),
-      });
+
       setLiked(true);
-    }
+    });
   };
 
   return (
-    <button onClick={toggleLike}>
-      {liked ? "❤️" : "🤍"}
+    <button
+      onClick={handleLike}
+      disabled={isPending}
+      className="px-3 py-1 rounded bg-pink-500 text-white"
+    >
+      {liked ? "Liked ❤️" : "Like 🤍"}
     </button>
   );
 }
