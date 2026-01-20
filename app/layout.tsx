@@ -54,7 +54,7 @@ export default function RootLayout({
                 {/* Header */}
               <Header />
                    <ScrollToTop />
-                  {children}
+                  {children}s
                 </main>
 
               </div>
