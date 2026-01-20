@@ -1,7 +1,7 @@
 
 export default function Loading() {
   return (
- <div className=' h-full min-h-[840px] flex justify-center items-center'>
+ <div className=' h-[calc(100vh-4rem)] flex justify-center items-center '>
   <div className="loader"></div>
  </div>
 )  ;
