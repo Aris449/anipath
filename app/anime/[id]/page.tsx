@@ -144,14 +144,14 @@ function getMonthName(month?: number) {
         
       </div>
       {anime.bannerImage ? 
-      <img src={anime.bannerImage} alt="banner image" className="w-full relative mask-image-to-bottom "/> : 
+      <img src={anime.bannerImage} alt="banner image" width={1920} height={600}  className="w-full relative mask-image-to-bottom "/> : 
       <div className="w-full mt-16"></div>}
 
       <div className="flex flex-col justify-center items-center">
 
       <div className="w-9/10 flex ">
         
-          <div className={`w-[230px] ${anime.bannerImage ? '' :""} shrink-0`}>
+          <div className={`w-[230px] ${anime.bannerImage ? 'mt-8' :""} shrink-0 `}>
               <img src={anime.coverImage.large} alt="cover image"  className="rounded-2xl"/>
 
               <div className="w-full flex justify-between">

@@ -22,7 +22,7 @@ export default async function SearchResults({search,}: {search?: string;}) {
       {results.map((anime: any) => (
         <div
           key={anime.id}
-          className="w-[120px] min-[1000px]:w-[200px] h-60 min-[1000px]:h-[380px]"
+          className="w-[120px] min-[1000px]:w-[200px] h-60 min-[1000px]:h-[380px] mb-4"
         >
           <Card
             imageSrc={anime.coverImage.large}
