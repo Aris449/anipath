@@ -12,7 +12,7 @@ interface CardProps {
 
 const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved }: CardProps) => {
   return (
-    <div className="w-full bg-bg-dark rounded-xl h-60 min-[1000px]:h-[400px] flex flex-col">
+    <div className="w-full bg-bg-dark rounded-xl h-66 min-[1000px]:h-[400px] flex flex-col">
       <Link href={animeId ? `/anime/${animeId}` : "#"}>
         <img
           src={imageSrc}

@@ -1,6 +1,7 @@
 import { searchAnime } from "@/lib/anilist";
 import Card from "./Card";
 import { getLikedAnimeIds } from "./getLikedAnimeIds";
+import { getSavedAnimeIds } from "./getSavedAmimeIds";
 
 export default async function SearchResults({search,}: {search?: string;}) {
   
@@ -8,9 +9,10 @@ export default async function SearchResults({search,}: {search?: string;}) {
     return <p className="text-muted">Start typing to search for anime</p>;
   }
 
-  const [results, likedAnimeIds] = await Promise.all([
+  const [results, likedAnimeIds, savedAnimeIds] = await Promise.all([
     searchAnime(search),
     getLikedAnimeIds(),
+    getSavedAnimeIds(),
   ]);
 
   if (!results.length) {
@@ -35,6 +37,7 @@ export default async function SearchResults({search,}: {search?: string;}) {
         animeTitle={displayTitle}
         animeId={anime.id}
         liked={likedAnimeIds.includes(anime.id)}
+        saved={savedAnimeIds.includes(anime.id)}
       />
     </div>
   );
