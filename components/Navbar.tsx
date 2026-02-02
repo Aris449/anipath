@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <>
       {/* DESKTOP NAVBAR */}
-      <div className="hidden md:flex w-56 h-full bg-bg-dark flex-col gap-2 px-2">
+      <div className="hidden min-[1400px]:flex  w-56 h-full bg-bg-dark flex-col gap-2 px-2">
         <div>
           <div className="w-56 h-16 px-4 flex items-center"></div>
         </div>

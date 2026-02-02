@@ -13,46 +13,88 @@ interface ListItem {
 
 interface SaveListBtnProps {
   animeId: number;
-  initialSaved: boolean;
 }
 
-export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps) {
+const OFFSET = 6;
+
+export default function SaveListBtn({ animeId }: SaveListBtnProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [modalPos, setModalPos] = useState<{ top: number; left: number } | null>(null);
   const [lists, setLists] = useState<ListItem[]>([]);
   const [newListName, setNewListName] = useState("");
+  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
   const [isPending, startTransition] = useTransition();
+
   const { isSignedIn } = useAuth();
   const { openSignIn } = useClerk();
+
   const buttonRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  /* ---------- Mount safety ---------- */
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const updateModalPos = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setModalPos({
-        top: rect.bottom + 4,
-        left: rect.left,
-      });
-    }
+  /* ---------- Scroll lock---------- */
+useEffect(() => {
+  if (!open) return;
+
+  const scrollEl = (document.scrollingElement || document.documentElement) as HTMLElement;
+  const scrollTop = scrollEl.scrollTop;
+
+  scrollEl.style.overflow = "hidden";
+  scrollEl.style.height = "100%";
+
+  const preventScroll = (e: Event) => {
+    e.preventDefault();
   };
 
-  // Fetch lists when modal opens
+  window.addEventListener("wheel", preventScroll, { passive: false });
+  window.addEventListener("touchmove", preventScroll, { passive: false });
+
+  return () => {
+    scrollEl.style.overflow = "";
+    scrollEl.style.height = "";
+    scrollEl.scrollTop = scrollTop;
+
+    window.removeEventListener("wheel", preventScroll);
+    window.removeEventListener("touchmove", preventScroll);
+  };
+}, [open]);
+
+
+
+  /* ---------- Fetch lists ---------- */
   useEffect(() => {
-    if (open) {
-      fetch(`/api/lists?animeId=${animeId}`)
-        .then(res => res.json())
-        .then(setLists);
-      updateModalPos();
-    }
+    if (!open) return;
+
+    fetch(`/api/lists?animeId=${animeId}`)
+      .then(res => res.json())
+      .then(setLists);
   }, [open, animeId]);
 
-  // Handle scroll and click outside
+  /* ---------- Position calculation (after render) ---------- */
+  useEffect(() => {
+    if (!open || !buttonRef.current || !modalRef.current) return;
+
+    const btnRect = buttonRef.current.getBoundingClientRect();
+    const modalRect = modalRef.current.getBoundingClientRect();
+
+    const spaceBelow = window.innerHeight - btnRect.bottom;
+    const spaceAbove = btnRect.top;
+
+    const openUpwards = spaceBelow < modalRect.height && spaceAbove > modalRect.height;
+
+    setPosition({
+      left: btnRect.left,
+      top: openUpwards
+        ? btnRect.top - modalRect.height - OFFSET
+        : btnRect.bottom + OFFSET,
+    });
+  }, [open, lists.length]);
+
+  /* ---------- Outside click ---------- */
   useEffect(() => {
     if (!open) return;
 
@@ -67,17 +109,11 @@ export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps)
       }
     };
 
-    const handleScroll = () => updateModalPos();
-
     document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleScroll, true);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll, true);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
+  /* ---------- Toggle ---------- */
   const handleToggle = () => {
     if (!isSignedIn) {
       openSignIn();
@@ -86,6 +122,7 @@ export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps)
     setOpen(prev => !prev);
   };
 
+  /* ---------- Toggle list ---------- */
   const toggleList = (listId: string) => {
     startTransition(async () => {
       setLists(prev =>
@@ -110,26 +147,8 @@ export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps)
     });
   };
 
-  const createNewList = () => {
-    if (!newListName.trim()) return;
-
-    startTransition(async () => {
-      const res = await fetch("/api/lists", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: newListName }),
-      });
-
-      if (!res.ok) return;
-
-      const newList = await res.json();
-      setLists(prev => [...prev, { ...newList, contains: false }]);
-      setNewListName("");
-    });
-  };
-
   return (
-    <div className="relative inline-block">
+    <div className="inline-block">
       <button
         ref={buttonRef}
         onClick={handleToggle}
@@ -140,12 +159,14 @@ export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps)
 
       {mounted &&
         open &&
-        modalPos &&
         createPortal(
           <div
             ref={modalRef}
             className="fixed bg-bg-dark text-white rounded-xl shadow-lg w-72 p-4 z-50"
-            style={{ top: `${modalPos.top}px`, left: `${modalPos.left}px` }}
+            style={{
+              top: position?.top ?? -9999,
+              left: position?.left ?? -9999,
+            }}
           >
             <h2 className="text-lg font-bold mb-3">Save to…</h2>
 
@@ -162,22 +183,6 @@ export default function SaveListBtn({ animeId, initialSaved }: SaveListBtnProps)
                   {list.name}
                 </label>
               ))}
-            </div>
-
-            <div className="mt-4 flex gap-2">
-              <input
-                type="text"
-                placeholder="New list"
-                value={newListName}
-                onChange={e => setNewListName(e.target.value)}
-                className="flex-1 p-1 border border-gray-600 bg-bg-dark text-white text-sm rounded"
-              />
-              <button
-                onClick={createNewList}
-                className="px-3 py-1 bg-primary rounded text-white text-sm"
-              >
-                + Create
-              </button>
             </div>
 
             <button

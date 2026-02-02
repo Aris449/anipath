@@ -29,7 +29,7 @@ const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved }: CardPro
 
         <div className="mt-auto flex justify-end">
           {animeId && <LikeBtn animeId={animeId} initialLiked={liked} />}
-            {animeId && <SaveListBtn animeId={animeId}  initialSaved={saved}/>}
+            {animeId && <SaveListBtn animeId={animeId}/>}
 
         </div>
       </div>
