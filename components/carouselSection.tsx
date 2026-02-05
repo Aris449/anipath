@@ -36,11 +36,7 @@ export default function CarouselSection({
   const isMobile = windowWidth <= 1000;
 
   const items = animeList.map((anime) => {
-    const titleText = anime.title.english || anime.title.romaji;
-    const displayTitle =
-      titleText.length > 20
-        ? titleText.slice(0, isMobile ? 24 : 30) + "..."
-        : titleText;
+   const displayTitle = anime.title.english || anime.title.romaji;
 
     return (
       <Card

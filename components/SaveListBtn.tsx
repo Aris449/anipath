@@ -20,6 +20,7 @@ const OFFSET = 6;
 export default function SaveListBtn({ animeId }: SaveListBtnProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
   const [lists, setLists] = useState<ListItem[]>([]);
   const [newListName, setNewListName] = useState("");
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
@@ -31,12 +32,12 @@ export default function SaveListBtn({ animeId }: SaveListBtnProps) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  /* ---------- Mount safety ---------- */
+  //Mount safety 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  /* ---------- Scroll lock---------- */
+  // Scroll lock
 useEffect(() => {
   if (!open) return;
 
@@ -65,36 +66,49 @@ useEffect(() => {
 
 
 
-  /* ---------- Fetch lists ---------- */
-  useEffect(() => {
-    if (!open) return;
+  //Fetch lists
+useEffect(() => {
+  if (!open) {
+    setReady(false);
+    return;
+  }
 
-    fetch(`/api/lists?animeId=${animeId}`)
-      .then(res => res.json())
-      .then(setLists);
-  }, [open, animeId]);
+  const load = async () => {
+    const res = await fetch(`/api/lists?animeId=${animeId}`);
+    const data = await res.json();
+    setLists(data);
+  };
 
-  /* ---------- Position calculation (after render) ---------- */
-  useEffect(() => {
-    if (!open || !buttonRef.current || !modalRef.current) return;
+  load();
+}, [open, animeId]);
 
-    const btnRect = buttonRef.current.getBoundingClientRect();
-    const modalRect = modalRef.current.getBoundingClientRect();
 
-    const spaceBelow = window.innerHeight - btnRect.bottom;
-    const spaceAbove = btnRect.top;
+  // Position calculation (after render) 
+useEffect(() => {
+  if (!open || !buttonRef.current || !modalRef.current || lists.length === 0) return;
 
-    const openUpwards = spaceBelow < modalRect.height && spaceAbove > modalRect.height;
+  const btnRect = buttonRef.current.getBoundingClientRect();
+  const modalRect = modalRef.current.getBoundingClientRect();
 
-    setPosition({
-      left: btnRect.left,
-      top: openUpwards
-        ? btnRect.top - modalRect.height - OFFSET
-        : btnRect.bottom + OFFSET,
-    });
-  }, [open, lists.length]);
+  const spaceBelow = window.innerHeight - btnRect.bottom;
+  const spaceAbove = btnRect.top;
 
-  /* ---------- Outside click ---------- */
+  const openUpwards = spaceBelow < modalRect.height && spaceAbove > modalRect.height;
+
+  setPosition({
+    left: btnRect.left,
+    top: openUpwards
+      ? btnRect.top - modalRect.height - OFFSET
+      : btnRect.bottom + OFFSET,
+  });
+
+  //allow modal to appear
+  setReady(true);
+
+}, [open, lists]);
+
+
+  //Outside click
   useEffect(() => {
     if (!open) return;
 
@@ -113,7 +127,7 @@ useEffect(() => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  /* ---------- Toggle ---------- */
+  //Toggle modal
   const handleToggle = () => {
     if (!isSignedIn) {
       openSignIn();
@@ -122,7 +136,7 @@ useEffect(() => {
     setOpen(prev => !prev);
   };
 
-  /* ---------- Toggle list ---------- */
+  //Toggle list 
   const toggleList = (listId: string) => {
     startTransition(async () => {
       setLists(prev =>
@@ -147,6 +161,30 @@ useEffect(() => {
     });
   };
 
+  //Create new list
+const createNewList = () => {
+  if (!newListName.trim()) return;
+
+  startTransition(async () => {
+    const res = await fetch("/api/lists", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newListName }),
+    });
+
+    if (!res.ok) return;
+
+    const newList = await res.json();
+
+    // add to UI instantly
+    setLists(prev => [...prev, { ...newList, contains: true }]);
+
+    // clear input
+    setNewListName("");
+  });
+};
+
+
   return (
     <div className="inline-block">
       <button
@@ -159,41 +197,75 @@ useEffect(() => {
 
       {mounted &&
         open &&
-        createPortal(
-          <div
-            ref={modalRef}
-            className="fixed bg-bg-dark text-white rounded-xl shadow-lg w-72 p-4 z-50"
-            style={{
-              top: position?.top ?? -9999,
-              left: position?.left ?? -9999,
-            }}
-          >
-            <h2 className="text-lg font-bold mb-3">Save to…</h2>
+       createPortal(
+  <div
+    ref={modalRef}
+    className={`fixed bg-bg-dark text-white rounded-xl shadow-2xl w-72 p-4 z-50 border border-white/10 transition-opacity duration-150 ${
+  ready ? "opacity-100" : "opacity-0"
+}`}
+    style={{
+      top: position?.top ?? -9999,
+      left: position?.left ?? -9999,
+    }}
+  >
+    {/* Title */}
+    <h2 className="text-lg font-semibold mb-3">Save to…</h2>
 
-            <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
-              {lists.map(list => (
-                <label key={list._id} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={list.contains}
-                    onChange={() => toggleList(list._id)}
-                    disabled={isPending}
-                    className="accent-primary"
-                  />
-                  {list.name}
-                </label>
-              ))}
-            </div>
+    {/* Lists */}
+    <div className="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1">
+      {lists.map(list => (
+        <label
+          key={list._id}
+          className="flex items-center gap-2 text-sm cursor-pointer hover:bg-white/5 px-2 py-1 rounded"
+        >
+          <input
+            type="checkbox"
+            checked={list.contains}
+            onChange={() => toggleList(list._id)}
+            disabled={isPending}
+            className="accent-primary cursor-pointer"
+          />
+          {list.name}
+        </label>
+      ))}
+    </div>
 
-            <button
-              onClick={() => setOpen(false)}
-              className="mt-3 text-xs text-gray-400 hover:text-white"
-            >
-              Close
-            </button>
-          </div>,
-          document.body
-        )}
+    {/* Divider */}
+    <div className="h-px bg-white/10 my-3" />
+
+    {/* Create new list */}
+    <div className="flex gap-2">
+      <input
+        type="text"
+        placeholder="New list"
+        value={newListName}
+        onChange={(e) => setNewListName(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && createNewList()}
+        className="flex-1 px-1 py-2 border border-white/10 bg-black/30 text-white text-sm rounded-lg outline-none focus:border-primary"
+      />
+
+      <button
+        onClick={createNewList}
+        disabled={isPending || !newListName.trim()}
+        className="px-1 py-2 bg-primary rounded-lg text-white text-sm hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        Create
+      </button>
+    </div>
+
+    {/* Close */}
+    <button
+      onClick={() => setOpen(false)}
+      className="mt-3 text-xs text-gray-400 hover:text-white w-full text-center"
+    >
+      Close
+    </button>
+  </div>,
+  document.body
+)
+}
+
+        
     </div>
   );
 }

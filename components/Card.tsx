@@ -23,7 +23,7 @@ const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved }: CardPro
       </Link>
 
       <div className="w-full flex flex-col flex-1 px-1 min-[1001px]:px-4 my-2">
-        <h3 className="text-sm min-[1001px]:text-lg font-semibold">
+        <h3 className="text-sm line-clamp-2 leading-tight min-[1001px]:text-lg font-semibold">
           {animeTitle}
         </h3>
 
