@@ -26,18 +26,24 @@ const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved, genres }:
       style={{ background: "var(--bg-light)", transformOrigin: "center top" }}
     />
 
-    {/* Overlay */}
-    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      <div className="text-center font-bold gap-2 flex flex-wrap justify-center">
-        {genres?.map((genre, idx) => (
-          <div className="p-1" key={idx}>
-            <span 
-             onClick={() => router.push(`/genre/${genre.toLowerCase()}`)}
-            className="bg-(--color-accent) rounded-2xl p-2"  >{genre}</span>
-          </div>
-    ))}
+  {/* Overlay */}
+<div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+  <div className="text-center font-bold gap-2 flex flex-wrap justify-center">
+    {genres?.map((genre, idx) => (
+      <div className="p-1" key={idx}>
+        <span
+          onClick={(e) => {
+            e.preventDefault(); // prevents Link navigation when clicking genre
+            router.push(`/genre/${genre.toLowerCase()}`);
+          }}
+          className="bg-(--color-accent) rounded-2xl p-2 cursor-pointer"
+        >
+          {genre}
+        </span>
       </div>
-    </div>
+    ))}
+  </div>
+</div>
   </Link>
 
   {/* Title and Buttons */}
