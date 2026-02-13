@@ -261,6 +261,41 @@ export async function fetchAllTimePopularAnime(page: number): Promise<Anime[]> {
   return json.data.Page.media as Anime[];
 }
 
+export async function fetchAnimeByIds(ids: number[]) {
+  if (ids.length === 0) return [];
+
+  const query = `
+    query ($ids: [Int]) {
+      Page(perPage: 50) {
+        media(id_in: $ids, type: ANIME) {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+          }
+        }
+      }
+    }
+  `;
+
+  const res = await fetch("https://graphql.anilist.co", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query,
+      variables: { ids },
+    }),
+    next: { revalidate: 60 }, 
+  });
+
+  const json = await res.json();
+  return json.data.Page.media;
+}
+
+
 export async function fetchAnimeById(id: number): Promise<AnimeDetails | null> {
 const query = `
   query ($id: Int) {

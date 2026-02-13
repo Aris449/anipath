@@ -1,11 +1,6 @@
 import CarouselSection from "@/components/carouselSection";
-import {
-  fetchTrendingAnime,
-  fetchUpcomingAnime,
-  fetchAllTimePopularAnime,
-} from "@/lib/anilist";
+import {fetchTrendingAnime,fetchUpcomingAnime,fetchAllTimePopularAnime,} from "@/lib/anilist";
 import { getLikedAnimeIds } from "@/components/getLikedAnimeIds";
-import { get } from "http";
 import { getSavedAnimeIds } from "@/components/getSavedAmimeIds";
 
 export default async function Home() {

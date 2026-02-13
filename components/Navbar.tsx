@@ -2,13 +2,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useNavbar } from './NavbarContextProvider';
+import {SignedIn} from "@clerk/nextjs";
 
 const link_items = [
   { id: 1, href: '/', icon: '/icons/home_dark.png', label: 'Home' },
   { id: 2, href: '/anime', icon: '/icons/home_dark.png', label: 'Anime' },
 ];
 
+const signedIn_link_items = [
+  { id: 1, href: '/lists', icon: '/icons/home_dark.png', label: 'Your Lists' },
+];
+
+
 const Navbar = () => {
+
+
+
   const { active, setActive } = useNavbar();
 
   return (
@@ -28,6 +37,19 @@ const Navbar = () => {
             <span>{item.label}</span>
           </Link>
         ))}
+        <SignedIn>
+            {signedIn_link_items.map(item => (
+          <Link
+            key={item.id}
+            href={item.href}
+            className="flex gap-4 text-base py-2 px-4 mt-2 hover:bg-(--bg-light) rounded-2xl"
+          >
+            <Image src={item.icon} alt="" width={24} height={24} />
+            <span>{item.label}</span>
+          </Link>
+        ))
+            }
+        </SignedIn>
       </div>
 
       {/* MOBILE OVERLAY (smooth fade) */}
@@ -70,6 +92,19 @@ const Navbar = () => {
             <span>{item.label}</span>
           </Link>
         ))}
+            <SignedIn>
+            {signedIn_link_items.map(item => (
+          <Link
+            key={item.id}
+            href={item.href}
+            className="flex gap-4 text-base py-2 px-4 mt-2 hover:bg-(--bg-light) rounded-2xl"
+          >
+            <Image src={item.icon} alt="" width={24} height={24} />
+            <span>{item.label}</span>
+          </Link>
+        ))
+            }
+        </SignedIn>
       </div>
     </>
   );
