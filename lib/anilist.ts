@@ -417,7 +417,7 @@ const query = `
       }
 
       siteUrl
-    }
+    }   
   }
 `;
 

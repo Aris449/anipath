@@ -22,7 +22,6 @@ export default function SearchBar() {
     const timeout = setTimeout(() => {
       const trimmed = value.trim();
 
-      // ⬅️ User cleared input → go back
       if (!trimmed) {
         if (startedSearch.current) {
           const prev = consumeSearchOrigin();
@@ -32,7 +31,6 @@ export default function SearchBar() {
         return;
       }
 
-      // Save origin ONCE (only when typing starts)
       if (!startedSearch.current) {
         setSearchOrigin(pathname);
         startedSearch.current = true;

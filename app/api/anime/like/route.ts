@@ -13,14 +13,12 @@ export async function POST(req: Request) {
 
   await connectDB();
 
-  // 1️⃣ Ensure anime exists
   await Anime.findOneAndUpdate(
     { animeId },
     { $setOnInsert: { animeId, likesCount: 0 } },
     { upsert: true }
   );
 
-  // 2️⃣ Get or create "Liked" list
   let likedList = await List.findOne({
     userId,
     isDefault: true,
@@ -38,7 +36,6 @@ export async function POST(req: Request) {
 
   const alreadyLiked = likedList.animeIds.includes(animeId);
 
-  // 3️⃣ Toggle list + counter (atomic intent)
   if (alreadyLiked) {
     await Promise.all([
       List.updateOne(

@@ -141,19 +141,26 @@ function getMonthName(month?: number) {
   return (
     <main>
 
-      <div>
-        
+
+      {anime.bannerImage && (
+      <div className="relative w-full h-140 overflow-hidden">
+        <Image
+          src={anime.bannerImage}
+          alt="banner"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
       </div>
-      {anime.bannerImage ? 
-      <Image src={anime.bannerImage} alt="banner image" width={1920} height={480}  className="w-full relative mask-image-to-bottom "/> : 
-      <div className="w-full mt-16"></div>}
+      )}
 
       <div className="flex flex-col justify-center items-center">
 
       <div className="w-9/10 flex ">
         
           <div className={`w-[230px] ${anime.bannerImage ? 'mt-8' :""} shrink-0 `}>
-              <img src={anime.coverImage.large} alt="cover image"  className="rounded-2xl"/>
+              <Image src={anime.coverImage.large} alt="cover image" width={230} height={345} className="rounded-2xl w-full h-auto" priority/>
 
               <div className="w-full flex justify-between">
 
