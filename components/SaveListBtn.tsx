@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect, useTransition } from "react";
 import { createPortal } from "react-dom";
 import { useAuth, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
 import Image from "next/image";
 
 interface ListItem {
@@ -26,6 +28,7 @@ export default function SaveListBtn({ animeId }: SaveListBtnProps) {
   const [newListName, setNewListName] = useState("");
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const { isSignedIn } = useAuth();
   const { openSignIn } = useClerk();
@@ -91,21 +94,38 @@ useEffect(() => {
   const btnRect = buttonRef.current.getBoundingClientRect();
   const modalRect = modalRef.current.getBoundingClientRect();
 
-  const spaceBelow = window.innerHeight - btnRect.bottom;
+  const viewportW = window.innerWidth;
+  const viewportH = window.innerHeight;
+
+  // -------- Vertical positioning (existing logic improved) --------
+  const spaceBelow = viewportH - btnRect.bottom;
   const spaceAbove = btnRect.top;
 
-  const openUpwards = spaceBelow < modalRect.height && spaceAbove > modalRect.height;
+  let top =
+    spaceBelow < modalRect.height && spaceAbove > modalRect.height
+      ? btnRect.top - modalRect.height - OFFSET   // open upward
+      : btnRect.bottom + OFFSET;                  // open downward
 
-  setPosition({
-    left: btnRect.left,
-    top: openUpwards
-      ? btnRect.top - modalRect.height - OFFSET
-      : btnRect.bottom + OFFSET,
-  });
+  if (top + modalRect.height > viewportH - 8) {
+    top = viewportH - modalRect.height - 8;
+  }
+  if (top < 8) top = 8;
 
-  //allow modal to appear
+  let left = btnRect.left;
+
+  const overflowRight = left + modalRect.width > viewportW - 8;
+  const overflowLeft = left < 8;
+
+  if (overflowRight) {
+    left = viewportW - modalRect.width - 8; // shift left
+  }
+
+  if (overflowLeft) {
+    left = 8; // clamp to left edge
+  }
+
+  setPosition({ top, left });
   setReady(true);
-
 }, [open, lists]);
 
 
@@ -138,29 +158,33 @@ useEffect(() => {
   };
 
   //Toggle list 
-  const toggleList = (listId: string) => {
-    startTransition(async () => {
+const toggleList = (listId: string) => {
+  startTransition(async () => {
+    setLists(prev =>
+      prev.map(l =>
+        l._id === listId ? { ...l, contains: !l.contains } : l
+      )
+    );
+
+    const res = await fetch("/api/lists/toggle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ listId, animeId }),
+    });
+
+    if (!res.ok) {
       setLists(prev =>
         prev.map(l =>
           l._id === listId ? { ...l, contains: !l.contains } : l
         )
       );
+      return;
+    }
 
-      const res = await fetch("/api/lists/toggle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ listId, animeId }),
-      });
+    router.refresh();
+  });
+};
 
-      if (!res.ok) {
-        setLists(prev =>
-          prev.map(l =>
-            l._id === listId ? { ...l, contains: !l.contains } : l
-          )
-        );
-      }
-    });
-  };
 
   //Create new list
 const createNewList = () => {
@@ -254,7 +278,6 @@ const createNewList = () => {
         onKeyDown={(e) => e.key === "Enter" && createNewList()}
         className="flex-1 px-1 py-2 border border-white/10 bg-black/30 text-white text-sm rounded-lg outline-none focus:border-primary"
       />
-
       <button
         onClick={createNewList}
         disabled={isPending || !newListName.trim()}

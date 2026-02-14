@@ -1,9 +1,8 @@
-"use client";
 
 import Link from "next/link";
 import LikeBtn from "./LikeBtn";
 import SaveListBtn from "./SaveListBtn";
-import { useRouter } from "next/navigation";
+import GenreTag from "./GenreTag";
 
 interface CardProps {
   imageSrc?: string;
@@ -16,7 +15,6 @@ interface CardProps {
 
 
 const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved, genres }: CardProps) => {
-    const router = useRouter();
   return (
    <div className="w-full bg-bg-dark rounded-xl h-66 min-[1000px]:h-[400px] flex flex-col group relative ">
   <Link href={animeId ? `/anime/${animeId}` : "#"} className="relative overflow-hidden rounded-xl">
@@ -31,19 +29,13 @@ const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved, genres }:
   {/* Overlay */}
 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
   <div className="text-center font-bold gap-2 flex flex-wrap justify-center">
-    {genres?.map((genre, idx) => (
-      <div className="p-1" key={idx}>
-        <span
-          onClick={(e) => {
-            e.preventDefault();
-            router.push(`/genre/${genre.toLowerCase()}`);
-          }}
-          className="bg-(--color-accent) rounded-2xl p-2 cursor-pointer"
-        >
-          {genre}
-        </span>
-      </div>
-    ))}
+{genres?.map((genre, idx) => (
+  <div className="p-1" key={idx}>
+    <GenreTag genre={genre} />
+  </div>
+))}
+
+
   </div>
 </div>
   </Link>
