@@ -94,7 +94,7 @@ function getMonthName(month?: number) {
   </div>
 
       case "Info":
-        return <div className="flex flex-col justify-center my-4 w-full">
+        return <div className="grid grid-cols-2 md:hidden justify-center my-4 w-full">
 
           <div className="px-2 rounded-2xl">
               {currentAnime.format && (

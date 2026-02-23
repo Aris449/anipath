@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useNavbar } from "./NavbarContextProvider";
 import SearchBar from "./SearchBar";
+import ThemeToggle from "./ThemeToggle";
 import {
   SignInButton,
   SignOutButton,
@@ -53,6 +54,7 @@ const Header = () => {
             </button>
           </SignOutButton>
         </SignedIn>
+        <ThemeToggle/>
       </div>
 
     </header>

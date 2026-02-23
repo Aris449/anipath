@@ -161,7 +161,10 @@ function getMonthName(month?: number) {
       <div className="w-full max-w-[2000px] lg:mx-10 flex flex-col md:flex-row gap-6 md:gap-8">
         
           <div className={`w-full md:w-[230px] ${anime.bannerImage ? 'mt-4 md:mt-8' : 'mt-4'} shrink-0 flex flex-col md:items-start`}>
-              <Image src={anime.coverImage.large} alt="cover image" width={230} height={345} className="rounded-2xl w-full max-w-[115px] sm:max-w-[230px] h-auto" priority/>
+            <div>
+              
+            </div>
+              <Image src={anime.coverImage.large} alt="cover image" width={230} height={345} className="rounded-2xl w-full max-w-[220px] sm:max-w-[240px] h-auto" priority/>
 
               <div className="w-full max-w-[230px] flex gap-2 md:flex-col mt-4 md:w-full">
 

@@ -12,26 +12,22 @@
 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* bg and fg colors */
-    --background: hsl(0, 0%, 5%);
-    --bg-dark: hsl(0, 0%, 8%);
-    --bg-light: hsl(0, 0%, 12%);
-
-    --foreground: hsl(0, 0%, 95%);
-    --color-muted: hsl(0, 0%, 70%);
-    --color-accent: hsl(118, 52%, 58%);
 
 
-  }
+html[data-theme="dark"] {
+  --background: hsl(0, 0%, 5%);
+  --bg-dark: hsl(0, 0%, 8%);
+  --bg-light: hsl(0, 0%, 12%);
+  --foreground: hsl(0, 0%, 95%);
+  --color-muted: hsl(0, 0%, 70%);
+  --color-accent: hsl(118, 52%, 58%);
 }
 
 @theme inline {
   /* bg and fg colors */
   --color-background: var(--background);
   --color-bg-dark:var(--bg-dark);
-   --bg-light: var(--bg-light);
+  --color-bg-light: var(--bg-light);
 
   --color-foreground: var(--foreground);
   --text-muted: var(--color-muted);
