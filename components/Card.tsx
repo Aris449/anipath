@@ -17,7 +17,7 @@ interface CardProps {
 const Card = ({ imageSrc = "", animeTitle = "", animeId, liked, saved, genres }: CardProps) => {
   return (
    <div className="w-full bg-bg-dark rounded-xl h-66 min-[1000px]:h-[400px] flex flex-col group relative ">
-  <Link href={animeId ? `/anime/${animeId}` : "#"} className="relative overflow-hidden rounded-xl">
+  <Link href={animeId ? `/anime/${animeId}/overview` : "#"} className="relative overflow-hidden rounded-xl">
     {/* Image */}
     <img
       src={imageSrc}

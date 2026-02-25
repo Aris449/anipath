@@ -40,7 +40,7 @@ const Header = () => {
       <div className="flex gap-3 items-center">
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="px-4 py-2 bg-bg-light rounded-md">
+            <button className="px-4 py-2 bg-bg-light rounded-4xl">
               Sign In
             </button>
           </SignInButton>
@@ -49,7 +49,7 @@ const Header = () => {
         <SignedIn>
           <UserButton />
           <SignOutButton>
-            <button className="px-4 py-2 bg-(--color-accent) rounded-md">
+            <button className="px-4 py-2 bg-(--color-accent) rounded-4xl shadow-none border-0" style={{ boxShadow: 'none' }}>
               Sign Out
             </button>
           </SignOutButton>

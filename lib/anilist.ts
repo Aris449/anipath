@@ -70,6 +70,60 @@ export interface AnimeDetails {
     url: string;
     icon?: string;
   }>;
+
+  trailer?: {
+    id: string;
+    site: string;
+    thumbnail?: string;
+  };
+
+  relations?: {
+    edges: Array<{
+      relationType: string;
+      node: {
+        id: number;
+        status?: string;
+        type?: string;
+        title: {
+          romaji?: string;
+        };
+        format?: string;
+        coverImage?: {
+          large?: string;
+        };
+      };
+    }>;
+  };
+
+  characters?: {
+    edges: Array<{
+      role?: string;
+      node: {
+        id: number;
+        name: {
+          full?: string;
+        };
+        image?: {
+          medium?: string;
+        };
+      };
+    }>;
+  };
+
+  staff?: {
+    edges: Array<{
+      role?: string;
+      node: {
+        id: number;
+        name: {
+          full?: string;
+        };
+        image?: {
+          medium?: string;
+        };
+      };
+    }>;
+  };
 }
 
 const ANILIST_URL = "https://graphql.anilist.co";
