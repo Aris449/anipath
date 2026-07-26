@@ -3,7 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Card from "@/components/Card";
 
-export default function InfiniteAnimeGrid({ initialData, filters }: any) {
+export default function InfiniteAnimeGrid({
+  initialData,
+  filters = {},
+  mediaType = "ANIME",
+  endpointPath = "/api/anime",
+  likedMediaIds = [],
+  savedMediaIds = [],
+  searchQuery = "",
+}: any) {
   const [page, setPage] = useState(1);
   const [anime, setAnime] = useState(initialData.media);
   const [hasNext, setHasNext] = useState(
@@ -29,14 +37,18 @@ export default function InfiniteAnimeGrid({ initialData, filters }: any) {
     const params = new URLSearchParams();
 
     if (filters.genre) params.set("genre", filters.genre);
+    if (filters.tag) params.set("tag", filters.tag);
+    if (filters.sort) params.set("sort", filters.sort);
     if (filters.season) params.set("season", filters.season);
     if (filters.year) params.set("year", filters.year);
     if (filters.format) params.set("format", filters.format);
     if (filters.status) params.set("status", filters.status);
+    if (searchQuery) params.set("search", searchQuery);
+    if (searchQuery) params.set("type", mediaType);
 
     params.set("page", String(nextPage));
 
-    const res = await fetch(`/api/anime?${params.toString()}`);
+    const res = await fetch(`${endpointPath}?${params.toString()}`);
     const data = await res.json();
 
     setAnime((prev: any[]) => {
@@ -71,18 +83,18 @@ export default function InfiniteAnimeGrid({ initialData, filters }: any) {
   return (
     <>
       {/* GRID */}
-      <div className="flex flex-wrap gap-3 md:gap-4 justify-center">
+      <div className="flex flex-wrap gap-3 min-[1001px]:gap-4 justify-center">
         {anime.map((anime: any) => (
-          <div key={anime.id} className="w-[120px] md:w-[200px]">
+          <div key={anime.id} className="w-[120px] min-[1001px]:w-[200px]">
             <Card
               mediaId={anime.id}
               mediaTitle={anime.title.english || anime.title.romaji}
               imageSrc={anime.coverImage.large}
               genres={anime.genres}
               color={anime.coverImage.color}
-              type="ANIME"
-              liked={false}
-              saved={false}
+              type={mediaType}
+              liked={likedMediaIds.includes(anime.id)}
+              saved={savedMediaIds.includes(anime.id)}
             />
           </div>
         ))}
@@ -105,7 +117,7 @@ export default function InfiniteAnimeGrid({ initialData, filters }: any) {
 
       {!hasNext && (
         <p className="text-center mt-4 text-gray-400">
-          No more anime
+          No more {mediaType.toLowerCase()}
         </p>
       )}
     </>

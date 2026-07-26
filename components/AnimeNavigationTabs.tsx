@@ -34,7 +34,7 @@ export default function AnimeNavigationTabs({
             scroll={false}
             className={`px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base font-medium whitespace-nowrap transition-all ${
               isActive
-                ? "bg-(--color-accent) text-foreground"
+                ? "bg-(--color-accent) text-foreground translate-y-0.5"
                 : "bg-bg-light text-foreground hover:opacity-90"
             } ${item.title === "Info" ? "md:hidden" : ""}`}
           >

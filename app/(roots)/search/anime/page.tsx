@@ -6,7 +6,7 @@ export default async function AnimeSearchPage({searchParams,}: {searchParams: Pr
 
   return (
     <main className="p-8">
-      <SearchResults search={search} />
+      <SearchResults search={search} type="ANIME" />
     </main>
   );
 }

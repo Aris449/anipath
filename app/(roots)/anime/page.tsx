@@ -1,4 +1,4 @@
-import FilterBar from "@/components/FilterBar";
+import FilterBar from "../../../components/FilterBar";
 import InfiniteAnimeGrid from "@/components/InfiniteAnimeGrid";
 import { getAnimePage } from "@/lib/anilist";
 
@@ -16,6 +16,8 @@ export default async function AnimePage({
   const page = Number(params.page || "1");
 
   const genre = params.genre;
+  const tag = params.tag;
+  const sort = params.sort;
   const season = params.season;
   const year = params.year;
   const format = params.format;
@@ -23,10 +25,12 @@ export default async function AnimePage({
 
   const initialData = await getAnimePage(page, {
     genre,
+    tag,
     season,
     year,
     format,
     status,
+    sort,
   });
 
   return (
@@ -36,12 +40,12 @@ export default async function AnimePage({
       </h1>
 
       <div className="mb-6 flex justify-center">
-        <FilterBar />
+        <FilterBar mediaType="ANIME" />
       </div>
 
       <InfiniteAnimeGrid
         initialData={initialData}
-        filters={{ genre, season, year, format, status }}
+        filters={{ genre, tag, sort, season, year, format, status }}
       />
     </div>
   );

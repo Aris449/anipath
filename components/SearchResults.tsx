@@ -1,49 +1,42 @@
-import { searchMedia } from "@/lib/anilist";
-import Card from "./Card";
+import { searchMediaPage } from "@/lib/anilist";
 import { getLikedMediaIds } from "./getLikedMediaIds";
 import { getSavedMediaIds } from "./getSavedMediaIds";
+import InfiniteAnimeGrid from "./InfiniteAnimeGrid";
 
-export default async function SearchResults({search,}: {search?: string;}) {
+export default async function SearchResults({
+  search,
+  type,
+}: {
+  search?: string;
+  type: "ANIME" | "MANGA";
+}) {
   
   if (!search) {
-    return <p className="text-muted">Start typing to search for anime</p>;
+    return (
+      <p className="text-muted">
+        Start typing to search for {type.toLowerCase()}
+      </p>
+    );
   }
 
-  const [results, likedAnimeIds, savedAnimeIds] = await Promise.all([
-    searchMedia(search, "ANIME"),
-    getLikedMediaIds("ANIME"),
-    getSavedMediaIds("ANIME"),
+  const [initialData, likedAnimeIds, savedAnimeIds] = await Promise.all([
+    searchMediaPage(search, type, 1),
+    getLikedMediaIds(type),
+    getSavedMediaIds(type),
   ]);
 
-  if (!results.length) {
+  if (!initialData.media.length) {
     return <p>No results found</p>;
   }
 
-
   return (
-    <div className="flex flex-wrap justify-center gap-6 mt-12">
-     {results.map((anime: any) => {
-  const titleText = anime.title.english ?? anime.title.romaji ?? "";
-  const displayTitle =
-    titleText.length > 30 ? titleText.slice(0, 30) + "…" : titleText;
-
-  return (
-    <div
-      key={anime.id}
-      className="w-[120px] min-[1000px]:w-[200px] h-60 min-[1000px]:h-[380px] mb-4"
-    >
-      <Card
-        imageSrc={anime.coverImage.large}
-        mediaTitle={displayTitle}
-        mediaId={anime.id}
-        genres={anime.genres}
-        liked={likedAnimeIds.includes(anime.id)}
-        saved={savedAnimeIds.includes(anime.id)}
-        type="ANIME"
-      />
-    </div>
-  );
-})}
-    </div>
+    <InfiniteAnimeGrid
+      initialData={initialData}
+      mediaType={type}
+      endpointPath="/api/search"
+      searchQuery={search}
+      likedMediaIds={likedAnimeIds}
+      savedMediaIds={savedAnimeIds}
+    />
   );
 }

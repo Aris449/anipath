@@ -15,12 +15,19 @@ export default function SearchBar() {
 
   const initial = searchParams.get("search") ?? "";
   const [value, setValue] = useState(initial);
+  const placeholder = pathname.includes("/manga") ? "Search manga..." : "Search anime...";
 
   const startedSearch = useRef(false);
+  const pathnameRef = useRef(pathname);
+
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       const trimmed = value.trim();
+      const searchPath = pathnameRef.current.includes("/manga") ? "/search/manga" : "/search/anime";
 
       if (!trimmed) {
         if (startedSearch.current) {
@@ -36,18 +43,18 @@ export default function SearchBar() {
         startedSearch.current = true;
       }
 
-      router.push(`/search/anime?search=${encodeURIComponent(trimmed)}`);
+      router.push(`${searchPath}?search=${encodeURIComponent(trimmed)}`);
     }, 150);
 
     return () => clearTimeout(timeout);
-  }, [value]); // ❗ ONLY depend on input
+  }, [value, router]);
 
   return (
     <div className="w-full h-12 bg-bg-dark rounded-4xl flex items-center px-4">
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search anime..."
+        placeholder={placeholder}
         className="w-full bg-transparent outline-none"
       />
       <Image

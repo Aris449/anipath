@@ -1,62 +1,44 @@
-import Card from "@/components/Card";
-import { getMangaPage, Media } from "@/lib/anilist";
-import Pagination from "@/components/Pagination";
-import { getLikedMediaIds } from "@/components/getLikedMediaIds";
-import { getSavedMediaIds } from "@/components/getSavedMediaIds";
+import FilterBar from "../../../components/FilterBar";
+import InfiniteAnimeGrid from "@/components/InfiniteAnimeGrid";
+import { getMangaPage } from "@/lib/anilist";
 
 
 export default async function MangaPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ page?: string }>;
+  searchParams: any;
 }) {
-  const params = await searchParams;
-  const page = Number(params?.page ?? "1");
+  const params =
+    searchParams && typeof searchParams.then === "function"
+      ? await searchParams
+      : searchParams || {};
 
-  const [data, likedMangaIds, savedMangaIds] = await Promise.all([
-    getMangaPage(page),
-    getLikedMediaIds("MANGA"),
-    getSavedMediaIds("MANGA"),
-  ]);
+  const page = Number(params.page || "1");
 
-  const computedLast =
-    typeof data.pageInfo.total === "number" && typeof data.pageInfo.perPage === "number" && data.pageInfo.perPage > 0
-      ? Math.ceil(data.pageInfo.total / data.pageInfo.perPage)
-      : data.pageInfo.lastPage;
+  const genre = params.genre;
+  const tag = params.tag;
+  const sort = params.sort;
+  const format = params.format;
+  const status = params.status;
 
-  const safeLast = Math.max(1, computedLast);
-  const effectivePageInfo = {
-    ...data.pageInfo,
-    hasNextPage: page < safeLast,
-    lastPage: safeLast,
-  };
+  const initialData = await getMangaPage(page, { genre, tag, format, status, sort });
 
   return (
     <div className="px-4 py-6">
+      <h1 className="mb-6 flex justify-center text-2xl font-bold min-[1001px]:text-4xl">
+        MANGA
+      </h1>
 
-      <div >
-      <h1 className=" text-2xl min-[1001px]:text-4xl mb-1 lg:mb-4 font-bold flex justify-center">MANGA</h1>
+      <div className="mb-6 flex justify-center">
+        <FilterBar mediaType="MANGA" />
+      </div>
 
-        <div className="flex flex-wrap gap-3 min-[1001px]:gap-4 justify-center">
-        {data.media.map((manga: Media) => (
-          <div key={manga.id} className="w-[120px] min-[1001px]:w-[200px]">
-            <Card
-              mediaId={manga.id}
-              mediaTitle={manga.title.english || manga.title.romaji}
-              imageSrc={manga.coverImage.large}
-              liked={likedMangaIds.includes(manga.id)}
-              saved={savedMangaIds.includes(manga.id)}
-              genres={manga.genres}
-              color={manga.coverImage.color}
-              type="MANGA"
-            />
-          </div>
-        ))}
-        </div>
-      </div>
-      <div className='flex w-full justify-center mt-6'>
-      <Pagination page={page} basePath="/manga" mediaType="MANGA" pageInfo={effectivePageInfo} />
-      </div>
+      <InfiniteAnimeGrid
+        initialData={initialData}
+        filters={{ genre, tag, sort, format, status }}
+        mediaType="MANGA"
+        endpointPath="/api/manga"
+      />
     </div>
   );
 }

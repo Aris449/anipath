@@ -59,7 +59,7 @@ export default function Pagination({
       {page > 1 && (
         <Link
           href={createPageUrl(page - 1)}
-          className="w-10 h-10 bg-bg-dark rounded-full flex items-center justify-center hover:bg-[var(--color-accent)] transition"
+          className="w-10 h-10 bg-bg-dark rounded-full flex items-center justify-center hover:bg-(--color-accent) transition"
         >
           {"<"}
         </Link>
@@ -90,8 +90,8 @@ export default function Pagination({
           href={createPageUrl(p)}
           className={`w-10 h-10 rounded-full flex items-center justify-center transition ${
             p === page
-              ? "bg-[var(--color-accent)] text-black"
-              : "bg-bg-dark hover:bg-[var(--color-accent)]"
+              ? "bg-(--color-accent) text-black"
+              : "bg-bg-dark hover:bg-(--color-accent)"
           }`}
         >
           {p}
@@ -120,7 +120,7 @@ export default function Pagination({
       {pageInfo.hasNextPage && (
         <Link
           href={createPageUrl(page + 1)}
-          className="w-10 h-10 bg-bg-dark rounded-full flex items-center justify-center hover:bg-[var(--color-accent)] transition"
+          className="w-10 h-10 bg-bg-dark rounded-full flex items-center justify-center hover:bg-(--color-accent) transition"
         >
           {">"}
         </Link>

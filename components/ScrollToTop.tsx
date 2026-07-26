@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 export default function ScrollToTop() {
@@ -8,13 +8,13 @@ export default function ScrollToTop() {
   const prevPathnameRef = useRef<string>("");
 
   useEffect(() => {
-    const currentAnimeMatch = pathname.match(/\/anime\/(\d+)\//);
-    const prevAnimeMatch = prevPathnameRef.current.match(/\/anime\/(\d+)\//);
+    const currentMediaMatch = pathname.match(/\/(anime|manga)\/(\d+)\//);
+    const prevMediaMatch = prevPathnameRef.current.match(/\/(anime|manga)\/(\d+)\//);
 
-    const currentAnimeId = currentAnimeMatch?.[1];
-    const prevAnimeId = prevAnimeMatch?.[1];
+    const currentMediaId = currentMediaMatch?.[2];
+    const prevMediaId = prevMediaMatch?.[2];
 
-    if (currentAnimeId !== prevAnimeId) {
+    if (currentMediaId !== prevMediaId) {
       const mains = document.querySelectorAll("main.flex-1");
       mains.forEach((el) => {
         el.scrollTo({ top: 0, behavior: "instant" as any });
