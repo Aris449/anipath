@@ -155,6 +155,9 @@ export default async function AnimeLayout({
     { title: "Staff", href: `staff` },
   ];
 
+  const getGenreHref = (genre: string) =>
+    `/anime?genre=${encodeURIComponent(genre)}&page=1`;
+
   return (
     <main>
       {anime.bannerImage && (
@@ -215,7 +218,7 @@ export default async function AnimeLayout({
                     <div className="text-(--color-muted) font-semibold flex flex-wrap items-center gap-2">
                       {anime.genres.map((genre) => (
                         <Link
-                          href="#"
+                          href={getGenreHref(genre)}
                           className="text-sm sm:text-base px-2 py-1 rounded-lg bg-bg-gray  "
                           key={genre}
                         >
@@ -466,7 +469,7 @@ export default async function AnimeLayout({
                     <div className="text-(--color-muted) font-semibold flex flex-wrap items-center gap-2">
                       {anime.genres.map((genre) => (
                         <Link
-                          href="#"
+                          href={getGenreHref(genre)}
                           className="text-sm sm:text-base px-2 py-1 rounded-lg bg-bg-gray hover:bg-hover-gray text-foreground transition-colors "
                           key={genre}
                         >

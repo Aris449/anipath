@@ -48,6 +48,9 @@ export default async function MangaLayout({
     { title: "Staff", href: `staff` },
   ];
 
+  const getGenreHref = (genre: string) =>
+    `/manga?genre=${encodeURIComponent(genre)}&page=1`;
+
   return (
     <main>
       {manga.bannerImage && (
@@ -108,7 +111,7 @@ export default async function MangaLayout({
                     <div className="text-(--color-muted) font-semibold flex flex-wrap items-center gap-2">
                       {manga.genres.map((genre) => (
                         <Link
-                          href="#"
+                          href={getGenreHref(genre)}
                           className="text-sm sm:text-base px-2 py-1 rounded-lg bg-bg-gray  "
                           key={genre}
                         >
@@ -354,7 +357,7 @@ export default async function MangaLayout({
                     <div className="text-(--color-muted) font-semibold flex flex-wrap items-center gap-2">
                       {manga.genres.map((genre) => (
                         <Link
-                          href="#"
+                          href={getGenreHref(genre)}
                           className="text-sm sm:text-base px-2 py-1 rounded-lg bg-bg-gray hover:bg-hover-gray text-foreground transition-colors "
                           key={genre}
                         >

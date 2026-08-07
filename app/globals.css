@@ -3,14 +3,14 @@
 :root {
    /* bg and fg colors */
   --background: hsl(0, 0%, 95%);
-  --bg-dark: hsl(0, 0%, 92%);
+  --bg-dark: hsl(0, 0%, 90%);
   --bg-light: hsl(0, 0%, 85%);
   --bg-gray:hsla(0, 0%, 10%, 0.7);
   --bg-hover-gray:hsla(0, 0%, 30%, 0.6);
 
   --foreground: hsl(0, 0%, 5%);
   --color-muted: hsl(0, 0%, 30%);
-  --color-accent: hsl(174, 60%, 50%);
+  --color-accent: hsl(217, 60%, 68%);
 }
 
 
@@ -25,7 +25,7 @@ html[data-theme="dark"] {
 
   --foreground: hsl(0, 0%, 95%);
   --color-muted: hsl(0, 0%, 70%);
-  --color-accent: hsl(174, 60%, 50%);
+  --color-accent: hsl(217, 60%, 68%);
 }
 
 @theme inline {
