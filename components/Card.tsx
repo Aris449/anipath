@@ -5,6 +5,19 @@ import SaveListBtn from "./SaveListBtn";
 import GenreTag from "./GenreTag";
 import { MediaType } from "@/lib/anilist";
 
+const FORMAT_LABELS: Record<string, string> = {
+  TV: "TV",
+  TV_SHORT: "TV Short",
+  MOVIE: "Movie",
+  SPECIAL: "Special",
+  OVA: "OVA",
+  ONA: "ONA",
+  MUSIC: "Music",
+  MANGA: "Manga",
+  NOVEL: "Novel",
+  ONE_SHOT: "One Shot",
+};
+
 interface CardProps {
   imageSrc?: string;
   mediaTitle?: string | null;
@@ -14,12 +27,16 @@ interface CardProps {
   saved: boolean;
   type: MediaType; 
   color?: string | null;
+  episodes?: number | null;
+  chapters?: number | null;
+  format?: string | null;
 }
 
 
-const Card = ({ imageSrc = "", mediaTitle = "", mediaId, liked, saved, genres,type,color }: CardProps) => {
+const Card = ({ imageSrc = "", mediaTitle = "", mediaId, liked, saved, genres, type, color, episodes, chapters, format }: CardProps) => {
 
   const basePath = type === "ANIME" ? "anime" : "manga";
+  const formatLabel = format ? FORMAT_LABELS[format] ?? format : null;
   
   return (
   <div className="w-full bg-bg-dark rounded-xl h-66 min-[1001px]:h-[400px] flex flex-col group relative hover:scale-[1.03] transition">
@@ -55,8 +72,24 @@ const Card = ({ imageSrc = "", mediaTitle = "", mediaId, liked, saved, genres,ty
       {mediaTitle}
     </h3>
 
-    <div className="mt-auto flex justify-end gap-2">
-      {mediaId && <LikeBtn mediaId={mediaId} mediaType={type} initialLiked={liked} />}
+
+    <div className="mt-auto flex justify-between gap-2">
+      <div>
+        
+    {(type === "ANIME" ? (formatLabel || episodes != null) : chapters != null) && (
+      <div className="text-xs min-[1001px]:text-sm text-(--color-muted) font-medium flex items-center gap-1 mt-1">
+        {type === "ANIME" ? (
+          <>
+            {formatLabel && <span>{formatLabel}</span>}
+            {formatLabel && episodes != null && <span>·</span>}
+            {episodes != null && <span>{episodes} EP</span>}
+          </>
+        ) : (
+          <span>{chapters} ch</span>
+        )}
+      </div>
+    )}
+      </div>
       {mediaId && <SaveListBtn mediaId={mediaId} mediaType={type} />}
     </div>
   </div>

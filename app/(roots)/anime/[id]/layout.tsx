@@ -3,7 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ReactNode } from "react";
 import AnimeNavigationTabs from "@/components/AnimeNavigationTabs";
-
+import LikeBtn from "@/components/LikeBtn";
+import SaveListBtn from "@/components/SaveListBtn";
+import { getLikedMediaIds } from "@/components/getLikedMediaIds";
 export default async function AnimeLayout({
   params,
   children,
@@ -17,6 +19,11 @@ export default async function AnimeLayout({
   if (!anime) {
     return <div>Anime not found</div>;
   }
+
+  const mediaId = anime.id;
+  const type = "ANIME" as const;
+  const likedIds = await getLikedMediaIds("ANIME");
+  const liked = likedIds.includes(mediaId);
 
   const MONTHS = [
     "January",
@@ -195,12 +202,10 @@ export default async function AnimeLayout({
 
                 <div className="w-full  max-w-[230px] flex gap-2 md:flex-col mt-4 md:w-full">
                   <div className="flex items-start gap-2 md:w-full ">
-                    <button className="max-[600px]:w-[100px]  w-[150px]  md:mt-3 bg-(--color-accent) px-3 py-2 rounded-lg md:rounded-2xl font-medium hover:opacity-90 transition-opacity">
-                      like
-                    </button>
-                    <button className="max-[600px]:w-[60px] w-[72px] md:mt-3  bg-(--color-accent) px-3 py-2 rounded-lg md:rounded-2xl font-medium hover:opacity-90 transition-opacity">
-                      like
-                    </button>
+                          {mediaId && <LikeBtn mediaId={mediaId} mediaType={type} initialLiked={liked} />}
+                    
+                         {mediaId && <SaveListBtn mediaId={mediaId} mediaType={type} />}
+
                   </div>
                 </div>
               </div>

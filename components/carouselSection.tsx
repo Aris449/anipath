@@ -51,6 +51,9 @@ export default function CarouselSection({
         genres={media.genres}
         type={type}
         color={media.coverImage.color}
+        episodes={media.episodes}
+        chapters={media.chapters}
+        format={media.format}
       />
     );
   });

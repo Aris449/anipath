@@ -95,6 +95,9 @@ export default function InfiniteAnimeGrid({
               type={mediaType}
               liked={likedMediaIds.includes(anime.id)}
               saved={savedMediaIds.includes(anime.id)}
+              episodes={anime.episodes}
+              chapters={anime.chapters}
+              format={anime.format}
             />
           </div>
         ))}

@@ -21,6 +21,7 @@ export interface Media {
   episodes?: number | null;
   chapters?: number | null;
   volumes?: number | null;
+  format?: string | null;
   season?: string | null;
   seasonYear?: number | null;
   genres?: string[];
@@ -329,6 +330,7 @@ export async function fetchTrendingMedia(page: number, type: MediaType): Promise
           episodes
           chapters
           volumes
+          format
           season
           seasonYear
           genres
@@ -376,6 +378,7 @@ export async function fetchUpcomingAnime(page: number): Promise<Media[]> {
           season
           seasonYear
           episodes
+          format
           genres
         }
       }
@@ -457,6 +460,9 @@ export async function fetchMediaByIds(ids: number[], type: MediaType ) {
             extraLarge
              color
           }
+          episodes
+          chapters
+          format
           genres
         }
       }
@@ -787,6 +793,7 @@ export async function getAnimePage(
             season
             seasonYear
             episodes
+            format
             genres
           }
         }

@@ -59,6 +59,9 @@ export default async function ListAnimePage({
                 liked={false}
                 saved={true}
                 type={item.mediaType}
+                episodes={item.episodes}
+                chapters={item.chapters}
+                format={item.format}
               />
             </div>
           ))}
